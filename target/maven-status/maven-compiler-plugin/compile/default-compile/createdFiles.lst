@@ -1,0 +1,4 @@
+com/example/demo/DemoApplication.class
+com/example/demo/api/TestRestController.class
+com/example/demo/authapi/User.class
+com/example/demo/authapi/repositories/UserRepository.class
