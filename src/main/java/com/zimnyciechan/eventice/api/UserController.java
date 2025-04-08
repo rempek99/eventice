@@ -6,7 +6,7 @@
 
 package com.zimnyciechan.eventice.api;
 
-import com.zimnyciechan.eventice.data.User;
+import com.zimnyciechan.eventice.dto.UserDTO;
 import com.zimnyciechan.eventice.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,19 +20,19 @@ public class UserController {
     private IUserService userService;
 
     @GetMapping
-    public Iterable<User> getAllUsers() {
+    public Iterable<UserDTO> getAllUsers() {
         return userService.findAll();
     }
 
     @GetMapping(value = "{username}")
-    public User getUserByUsername(String username) {
+    public UserDTO getUserByUsername(String username) {
         return userService.findByUsername(username);
     }
 
     @RequestMapping(method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public User createUser(@RequestBody User user) {
+    public UserDTO createUser(@RequestBody UserDTO user) {
         System.out.println("CREATING USER:");
         System.out.println("Username: " + user.getUsername());
         System.out.println("Password: " + user.getPassword());

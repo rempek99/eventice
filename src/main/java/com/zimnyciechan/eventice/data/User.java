@@ -11,8 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "USERS")
 public class User {
 
@@ -25,6 +23,16 @@ public class User {
 
     //    TODO delete when Lombok bug will be resolved,
     //     unfortunately it do not see any getters and setters
+
+    public User() {
+
+    }
+    public User(Long id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
 
     public Long getId() {

@@ -7,15 +7,15 @@
 package com.zimnyciechan.eventice.services;
 
 import com.zimnyciechan.eventice.data.User;
-import com.zimnyciechan.eventice.exceptions.InternalException;
+import com.zimnyciechan.eventice.dto.UserDTO;
+import com.zimnyciechan.eventice.exceptions.ConflictException;
 import com.zimnyciechan.eventice.repositories.IUserRepository;
-import com.zimnyciechan.eventice.utils.EncryptionAlgorithms;
-import com.zimnyciechan.eventice.utils.EncryptionService;
+import com.zimnyciechan.eventice.utils.EntityDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -24,30 +24,30 @@ public class UserService implements IUserService {
     private IUserRepository userRepository;
 
     @Autowired
-    private EncryptionService encryptionService;
+    private EntityDTOMapper mapper;
 
     @Override
-    public User create(User user) {
-        try {
-            final String encryptedPassword =
-                    encryptionService.encrypt(
-                            user.getPassword(), EncryptionAlgorithms.MD5);
-            user.setPassword(encryptedPassword);
-        } catch (NoSuchAlgorithmException ex) {
-            throw InternalException.create();
+    public UserDTO create(UserDTO user) {
+
+        Optional<User> found = userRepository.findByEmail(user.getEmail());
+        if (found.isPresent()) {
+            throw ConflictException.create();
         }
-        return userRepository.save(user);
+        User userEntity = mapper.toEntity(user);
+        User created = userRepository.save(userEntity);
+        return mapper.toDTO(created);
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserDTO findByUsername(String username) {
+        User found = userRepository.findByUsername(username).orElse(null);
+        //TODO handle not found
+        return mapper.toDTO(found);
     }
 
     @Override
-    public Iterable<User> findAll() {
+    public Iterable<UserDTO> findAll() {
         List<User> all = userRepository.findAll();
-        System.out.println("All read users: " + all.size());
-        return all;
+        return all.stream().map(mapper::toDTO).toList();
     }
 }
