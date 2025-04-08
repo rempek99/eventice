@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -45,6 +46,8 @@ public class UserService implements IUserService {
 
     @Override
     public Iterable<User> findAll() {
-        return userRepository.findAll();
+        List<User> all = userRepository.findAll();
+        System.out.println("All read users: " + all.size());
+        return all;
     }
 }

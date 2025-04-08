@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("user")
+@RestController
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
@@ -31,8 +32,11 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public User createUser(User user) {
+    public User createUser(@RequestBody User user) {
         System.out.println("CREATING USER:");
+        System.out.println("Username: " + user.getUsername());
+        System.out.println("Password: " + user.getPassword());
+        System.out.println("Email: " + user.getEmail());
         return userService.create(user);
     }
 }
