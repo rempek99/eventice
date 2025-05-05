@@ -6,7 +6,6 @@
 
 package com.zimnyciechan.eventice.services;
 
-import com.zimnyciechan.eventice.data.User;
 import com.zimnyciechan.eventice.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
