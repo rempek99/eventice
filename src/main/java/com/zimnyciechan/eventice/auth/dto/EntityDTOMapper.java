@@ -4,15 +4,14 @@
  *
  */
 
-package com.zimnyciechan.eventice.utils;
+package com.zimnyciechan.eventice.auth.dto;
 
-import com.zimnyciechan.eventice.data.User;
-import com.zimnyciechan.eventice.dto.UserDTO;
-import com.zimnyciechan.eventice.exceptions.InternalException;
+import com.zimnyciechan.eventice.auth.entity.User;
+import com.zimnyciechan.eventice.utils.EncryptionAlgorithms;
+import com.zimnyciechan.eventice.utils.EncryptionService;
+import com.zimnyciechan.eventice.utils.exceptions.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 

@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2025. Created by zimnyciechan
  * Github: rempek99
- * 🍺🍺🍺
+ *
  */
 
-package com.zimnyciechan.eventice.services;
+package com.zimnyciechan.eventice.auth.services;
 
-import com.zimnyciechan.eventice.data.User;
-import com.zimnyciechan.eventice.dto.UserDTO;
-import com.zimnyciechan.eventice.exceptions.ConflictException;
-import com.zimnyciechan.eventice.repositories.IUserRepository;
-import com.zimnyciechan.eventice.utils.EntityDTOMapper;
+import com.zimnyciechan.eventice.auth.entity.User;
+import com.zimnyciechan.eventice.auth.dto.UserDTO;
+import com.zimnyciechan.eventice.utils.exceptions.ConflictException;
+import com.zimnyciechan.eventice.auth.repositories.IUserRepository;
+import com.zimnyciechan.eventice.auth.dto.EntityDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

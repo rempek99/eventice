@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2025. Created by zimnyciechan
  * Github: rempek99
- * 🍺🍺🍺
+ *
  */
 
-package com.zimnyciechan.eventice.repositories;
+package com.zimnyciechan.eventice.auth.repositories;
 
-import com.zimnyciechan.eventice.data.User;
+import com.zimnyciechan.eventice.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

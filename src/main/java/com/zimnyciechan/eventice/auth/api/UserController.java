@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2025. Created by zimnyciechan
  * Github: rempek99
- * 🍺🍺🍺
+ *
  */
 
-package com.zimnyciechan.eventice.api;
+package com.zimnyciechan.eventice.auth.api;
 
-import com.zimnyciechan.eventice.dto.UserDTO;
-import com.zimnyciechan.eventice.services.IUserService;
+import com.zimnyciechan.eventice.auth.dto.UserDTO;
+import com.zimnyciechan.eventice.auth.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2025. Created by zimnyciechan
  * Github: rempek99
- * 🍺🍺🍺
+ *
  */
 
-package com.zimnyciechan.eventice.exceptions;
+package com.zimnyciechan.eventice.utils.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
