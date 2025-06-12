@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Component
 public class EntityDTOMapper {
@@ -38,6 +39,6 @@ public class EntityDTOMapper {
         } catch (NoSuchAlgorithmException e) {
             throw InternalException.create();
         }
-        return new User(user.getId(), user.getUsername(), user.getEmail(), encryptedPassword);
+        return new User(user.getId(), true, user.getUsername(), user.getEmail(), encryptedPassword, List.of());
     }
 }

@@ -10,6 +10,7 @@ import com.zimnyciechan.eventice.auth.dto.UserDTO;
 import com.zimnyciechan.eventice.auth.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

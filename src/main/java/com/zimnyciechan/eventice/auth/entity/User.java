@@ -26,9 +26,14 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Boolean enabled = true;
     private String username;
     private String email;
     private String password;
+
+    @OneToMany
+    private List<UserAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
