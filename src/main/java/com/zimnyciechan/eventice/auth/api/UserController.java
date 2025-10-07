@@ -10,7 +10,6 @@ import com.zimnyciechan.eventice.auth.dto.UserDTO;
 import com.zimnyciechan.eventice.auth.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,9 +29,7 @@ public class UserController {
         return userService.findByUsername(username);
     }
 
-    @RequestMapping(method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDTO createUser(@RequestBody UserDTO user) {
         System.out.println("CREATING USER:");
         System.out.println("Username: " + user.getUsername());
@@ -41,4 +38,3 @@ public class UserController {
         return userService.create(user);
     }
 }
-

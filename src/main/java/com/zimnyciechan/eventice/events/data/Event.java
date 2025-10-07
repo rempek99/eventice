@@ -8,9 +8,7 @@ package com.zimnyciechan.eventice.events.data;
 
 import com.zimnyciechan.eventice.auth.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data

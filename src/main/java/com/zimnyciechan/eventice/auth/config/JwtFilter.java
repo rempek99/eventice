@@ -16,9 +16,10 @@ import java.io.IOException;
 
 public class JwtFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String tenantId = request.getHeader("X-Tenant-Id");
-        System.out.println(tenantId);
+        System.out.println("Hello its JWT Filter! " + tenantId);
         filterChain.doFilter(request, response);
     }
 }
