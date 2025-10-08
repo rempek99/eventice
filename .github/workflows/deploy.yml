@@ -18,8 +18,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: "24"
-          distribution: "corretto"
+          java-version: "17"
+          distribution: "temurin"
 
       # 3. Cache Maven dependencies
       - name: Cache Maven dependencies
@@ -30,15 +30,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 4. Run Maven tests
-      - name: Build with Maven
-        run: mvn --batch-mode clean test
+      # 4. Build JAR with Maven (including tests)
+      - name: Build JAR with Maven
+        run: mvn --batch-mode clean package
 
-      # 5. Build Docker image
+      # 5. Copy built JAR to Docker context
+      - name: Copy JAR to Docker context
+        run: cp target/*.jar app.jar
+
+      # 6. Build Docker image
       - name: Build Docker image
         run: docker build -t my-app:latest .
 
-      # 6. Push Docker image to Render.com
+      # 7. Push Docker image to Render.com
       - name: Deploy to Render.com
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
