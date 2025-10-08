@@ -1,4 +1,4 @@
-package com.zimnyciechan.eventice.auth.entity;
+package com.zimnyciechan.eventice.auth.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
