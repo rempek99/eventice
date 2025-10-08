@@ -1,0 +1,53 @@
+name: CI and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Set up JDK
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: "24"
+          distribution: "corretto"
+
+      # 3. Cache Maven dependencies
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # 4. Run Maven tests
+      - name: Build with Maven
+        run: mvn --batch-mode clean test
+
+      # 5. Build Docker image
+      - name: Build Docker image
+        run: docker build -t my-app:latest .
+
+      # 6. Push Docker image to Render.com
+      - name: Deploy to Render.com
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "serviceId": "srv-d3jc73hgv73c73fqg6s0",
+              "clearCache": true
+            }' \
+            https://api.render.com/v1/services/srv-d3jc73hgv73c73fqg6s0/deploys
