@@ -19,7 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.zimnyciechan.eventice.auth.services.CustomUserDetailsService;
+import com.zimnyciechan.eventice.auth.services.UserService;
 import com.zimnyciechan.eventice.auth.services.JwtService;
 
 import jakarta.servlet.Filter;
@@ -30,7 +30,7 @@ import jakarta.servlet.Filter;
 public class SecurityConfig {
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private UserService customUserDetailsService;
 
     @Autowired
     private JwtService jwtService;

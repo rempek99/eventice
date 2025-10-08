@@ -3,10 +3,16 @@ package com.zimnyciechan.eventice.auth.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 
+import com.zimnyciechan.eventice.auth.constants.RoleConstants;
+
 @Entity
-@Data
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "AUTHORITIES")
 public class UserAuthority implements GrantedAuthority {
@@ -14,11 +20,10 @@ public class UserAuthority implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
-    private String authority;
 
-    @Override
-    public String getAuthority() {
-        return authority;
-    }
+    @Column(nullable = false)
+    private String authority = RoleConstants.USER;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 }

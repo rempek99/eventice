@@ -7,9 +7,13 @@
 package com.zimnyciechan.eventice.auth.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,7 +22,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "USERS")
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -27,16 +31,27 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private Boolean enabled = true;
+
+    @NotNull
+    @Column(unique = true)
     private String username;
+
+    @NotNull
+    @Column(unique = true)
     private String email;
+
+    @NotNull
+    @Setter
     private String password;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    @Setter
     private List<UserAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 }
