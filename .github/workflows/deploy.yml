@@ -34,15 +34,7 @@ jobs:
       - name: Build JAR with Maven
         run: mvn --batch-mode clean package
 
-      # 5. Copy built JAR to Docker context
-      - name: Copy JAR to Docker context
-        run: cp target/*.jar app.jar
-
-      # 6. Build Docker image
-      - name: Build Docker image
-        run: docker build -t my-app:latest .
-
-      # 7. Push Docker image to Render.com
+      # 5. Trigger Build & Deploy on Render.com
       - name: Deploy to Render.com
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
