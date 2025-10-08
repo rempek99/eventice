@@ -1,5 +1,5 @@
-# Użyj oficjalnego obrazu JDK jako podstawy
-FROM eclipse-temurin:17-jdk-alpine
+# Użyj oficjalnego obrazu JDK 21 jako podstawy
+FROM eclipse-temurin:21-jdk-alpine
 
 # Ustaw katalog roboczy w kontenerze
 WORKDIR /app
