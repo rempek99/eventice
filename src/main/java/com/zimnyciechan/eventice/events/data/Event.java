@@ -6,7 +6,8 @@
 
 package com.zimnyciechan.eventice.events.data;
 
-import com.zimnyciechan.eventice.auth.entity.User;
+import com.zimnyciechan.eventice.auth.model.User;
+
 import jakarta.persistence.*;
 import lombok.Data;
 

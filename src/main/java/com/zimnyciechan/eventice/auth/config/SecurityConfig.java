@@ -9,49 +9,69 @@ package com.zimnyciechan.eventice.auth.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.zimnyciechan.eventice.auth.services.UserService;
+import com.zimnyciechan.eventice.auth.services.JwtService;
 
-import javax.sql.DataSource;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import jakarta.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
-    private DataSource dataSource;
+    private UserService customUserDetailsService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/public/**").permitAll()
-                        .anyRequest().authenticated())
-                .httpBasic(withDefaults());
+                .requestMatchers("/public/**", "/login", "/register", "/error").permitAll()
+                .anyRequest().authenticated());
         http.sessionManagement(
-                session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Disables CSRF protection, meaning the application will not be protected
+        // against CSRF attacks.Disabling CSRF protection can be justified for
+        // applications that are not vulnerable to such attacks, such as RESTful
+        // applications using token-based authentication (e.g., JWT) instead of
+        // sessions.
         http.csrf(AbstractHttpConfigurer::disable);
+
+        http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
+    // Despite the filter is used only internaly, it is a bean to allow dependency
+    // injection.
+    // Spring beans specification requires the method invoking bean creation to be
+    // public.
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user1 = User.withUsername("user1").password("{noop}password1").roles("USER").build();
-        UserDetails admin = User.withUsername("admin").password("{noop}adminPass").roles("ADMIN").build();
-        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-        userDetailsManager.createUser(user1);
-        userDetailsManager.createUser(admin);
-        return userDetailsManager;
+    public Filter jwtRequestFilter() {
+        return new JwtFilter(jwtService, customUserDetailsService);
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
 }

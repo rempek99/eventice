@@ -6,9 +6,10 @@
 
 package com.zimnyciechan.eventice.auth.repositories;
 
-import com.zimnyciechan.eventice.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.zimnyciechan.eventice.auth.model.User;
 
 import java.util.Optional;
 
@@ -16,5 +17,6 @@ import java.util.Optional;
 public interface IUserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
+
     Optional<User> findByEmail(String email);
 }

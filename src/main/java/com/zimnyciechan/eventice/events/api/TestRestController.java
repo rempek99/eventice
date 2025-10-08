@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.zimnyciechan.eventice.auth.constants.RoleConstants;
+
 @RestController
 public class TestRestController {
 
@@ -19,14 +21,20 @@ public class TestRestController {
     }
 
     @GetMapping("test-admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(RoleConstants.HAS_ROLE_ADMIN)
     public String testAdmin() {
         return "Hello Admin!";
     }
 
     @GetMapping("test-user")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize(RoleConstants.HAS_ROLE_USER)
     public String testUser() {
         return "Hello User!";
+    }
+
+    @GetMapping("test-creator")
+    @PreAuthorize(RoleConstants.HAS_ROLE_CREATOR)
+    public String testCreator() {
+        return "Hello Creator!";
     }
 }
