@@ -6,9 +6,13 @@
 
 package com.zimnyciechan.eventice.auth.services;
 
+import com.zimnyciechan.eventice.auth.constants.RoleConstants;
 import com.zimnyciechan.eventice.auth.model.User;
+import com.zimnyciechan.eventice.auth.model.UserAuthority;
 import com.zimnyciechan.eventice.auth.repositories.IUserRepository;
 import com.zimnyciechan.eventice.utils.exceptions.NotFoundException;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -30,7 +34,17 @@ public class UserService implements UserDetailsService {
     }
 
     public Long createUser(@NonNull User user) {
+        user.setAuthorities(
+                List.of(
+                        UserAuthority
+                                .builder().authority(RoleConstants.USER).user(user)
+                                .build()));
         User saved = userRepository.save(user);
         return saved.getId();
+    }
+
+    public void deleteUserByUsername(String username) {
+        User found = userRepository.findByUsername(username).orElseThrow(() -> NotFoundException.create("User"));
+        userRepository.delete(found);
     }
 }

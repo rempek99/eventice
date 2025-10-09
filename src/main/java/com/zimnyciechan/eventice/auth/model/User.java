@@ -9,6 +9,7 @@ package com.zimnyciechan.eventice.auth.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.List;
 @Entity
 @Table(name = "USERS")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -32,7 +34,7 @@ public class User implements UserDetails {
     private Long id;
 
     @NotNull
-    private Boolean enabled = true;
+    private boolean enabled = true;
 
     @NotNull
     @Column(unique = true)
