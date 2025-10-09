@@ -2,6 +2,7 @@ package com.zimnyciechan.eventice.auth.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import com.zimnyciechan.eventice.auth.constants.RoleConstants;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "AUTHORITIES")

@@ -15,32 +15,40 @@ import com.zimnyciechan.eventice.auth.services.UserService;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    @Autowired
-    private UserService userService;
+        @Autowired
+        private UserService userService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
-    @Override
-    public void run(String... args) throws Exception {
-        final User user1 = new User(-1L, true, "user", "user@example.com",
-                passwordEncoder.encode("password"), null);
-        final UserAuthority user1Authority = new UserAuthority(-1L, RoleConstants.USER, user1);
-        user1.setAuthorities(List.of(user1Authority));
+        private final static boolean ENABLED = false;
 
-        final User user2 = new User(-1L, true, "user2", "user2@example.com",
-                passwordEncoder.encode("password"), null);
-        final UserAuthority user2Authority = new UserAuthority(-1L, RoleConstants.ADMIN, user2);
-        user2.setAuthorities(List.of(user2Authority));
+        @Override
+        public void run(String... args) throws Exception {
+                if (ENABLED) {
+                        initUsers();
+                }
+        }
 
-        final User user3 = new User(-1L, true, "user3", "user3@example.com",
-                passwordEncoder.encode("password"), null);
-        final UserAuthority user3Authority = new UserAuthority(-1L, RoleConstants.CREATOR, user3);
-        user3.setAuthorities(List.of(user3Authority));
+        private void initUsers() {
+                final User user1 = new User(-1L, true, "user", "user@example.com",
+                                passwordEncoder.encode("password"), null);
+                final UserAuthority user1Authority = new UserAuthority(-1L, RoleConstants.USER, user1);
+                user1.setAuthorities(List.of(user1Authority));
 
-        userService.createUser(user1);
-        userService.createUser(user2);
-        userService.createUser(user3);
-    }
+                final User user2 = new User(-1L, true, "user2", "user2@example.com",
+                                passwordEncoder.encode("password"), null);
+                final UserAuthority user2Authority = new UserAuthority(-1L, RoleConstants.ADMIN, user2);
+                user2.setAuthorities(List.of(user2Authority));
+
+                final User user3 = new User(-1L, true, "user3", "user3@example.com",
+                                passwordEncoder.encode("password"), null);
+                final UserAuthority user3Authority = new UserAuthority(-1L, RoleConstants.CREATOR, user3);
+                user3.setAuthorities(List.of(user3Authority));
+
+                userService.createUser(user1);
+                userService.createUser(user2);
+                userService.createUser(user3);
+        }
 
 }
