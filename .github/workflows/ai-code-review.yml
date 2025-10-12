@@ -1,0 +1,21 @@
+name: AI Code Reviewer
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+permissions: write-all
+jobs:
+  ai-code-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run AI Code Review
+        uses: Codium-ai/pr-agent@main
+        with:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          exclude: "**/*.json, **/*.md" # Optional: exclude patterns separated by commas
