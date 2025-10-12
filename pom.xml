@@ -35,6 +35,7 @@
     <properties>
         <java.version>21</java.version>
         <spring-boot.version>3.5.6</spring-boot.version>
+        <frontend.dir>${project.basedir}/frontend</frontend.dir>
     </properties>
     <dependencies>
         <!-- Spring Dependencies -->
@@ -144,8 +145,9 @@
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v18.17.1</nodeVersion>
-                            <npmVersion>9.6.7</npmVersion>
+                            <nodeVersion>v24.9.0</nodeVersion>
+                            <npmVersion>11.6.0</npmVersion>
+                            <installDirectory>${frontend.dir}</installDirectory>
                         </configuration>
                     </execution>
                     <!-- Install Angular dependencies -->
@@ -156,6 +158,7 @@
                         </goals>
                         <configuration>
                             <arguments>install</arguments>
+                            <workingDirectory>${frontend.dir}</workingDirectory>
                         </configuration>
                     </execution>
                     <!-- Build the Angular app -->
@@ -166,6 +169,7 @@
                         </goals>
                         <configuration>
                             <arguments>run build</arguments>
+                            <workingDirectory>${frontend.dir}</workingDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -187,7 +191,7 @@
                             <outputDirectory>${project.build.directory}/classes/static</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/frontend/dist</directory>
+                                    <directory>${frontend.dir}/dist</directory>
                                 </resource>
                             </resources>
                         </configuration>
