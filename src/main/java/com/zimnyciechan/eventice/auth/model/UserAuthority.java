@@ -23,6 +23,7 @@ public class UserAuthority implements GrantedAuthority {
     private Long id;
 
     @Column(nullable = false)
+    @Builder.Default
     private String authority = RoleConstants.USER;
 
     @ManyToOne(fetch = FetchType.LAZY)
