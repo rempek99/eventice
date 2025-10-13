@@ -35,7 +35,7 @@
     <properties>
         <java.version>21</java.version>
         <spring-boot.version>3.5.6</spring-boot.version>
-        <frontend.dir>${project.basedir}/frontend</frontend.dir>
+        <frontend.dir>${project.basedir}/eventice-frontend</frontend.dir>
     </properties>
     <dependencies>
         <!-- Spring Dependencies -->
