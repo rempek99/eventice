@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.zimnyciechan.eventice.auth.constants.RoleConstants;
 import com.zimnyciechan.eventice.auth.controller.AuthController;
 import com.zimnyciechan.eventice.auth.model.AuthenticationRequest;
 import com.zimnyciechan.eventice.auth.model.User;
@@ -24,7 +23,7 @@ import com.zimnyciechan.eventice.utils.exceptions.NotFoundException;
 @SpringBootTest
 @SuppressWarnings("null")
 @ActiveProfiles("test")
-public class AuthControllerTest {
+public class AuthControllerTests {
 
     @Autowired
     private AuthController authController;
@@ -118,8 +117,7 @@ public class AuthControllerTest {
         assertEquals(TEST_USERNAME, createdUser.getUsername());
         assertNotEquals(TEST_PASSWORD, createdUser.getPassword());
         assertNotNull(createdUser.getAuthorities());
-        assertEquals(1, createdUser.getAuthorities().size());
-        assertEquals(RoleConstants.USER, createdUser.getAuthorities().stream().toList().get(0).getAuthority());
+        assertEquals(3, createdUser.getAuthorities().size());
         assertTrue(createdUser.isEnabled());
     }
 

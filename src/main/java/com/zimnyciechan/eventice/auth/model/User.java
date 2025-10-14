@@ -14,11 +14,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -49,11 +49,15 @@ public class User implements UserDetails {
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
-    @Setter
-    private List<UserAuthority> authorities;
+    @Builder.Default
+    private Set<UserAuthority> authorities = new HashSet<>();
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+    public Collection<UserAuthority> getAuthorities() {
+        return new HashSet<>(authorities);
+    }
+
+    public void addAuthorities(Set<UserAuthority> authorities) {
+        this.authorities.addAll(authorities);
     }
 }
