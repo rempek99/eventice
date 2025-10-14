@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private Long id;
 
     @NotNull
+    @Builder.Default
     private boolean enabled = true;
 
     @NotNull
