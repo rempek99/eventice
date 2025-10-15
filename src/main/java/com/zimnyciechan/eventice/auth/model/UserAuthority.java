@@ -14,9 +14,8 @@ import com.zimnyciechan.eventice.auth.constants.RoleConstants;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "AUTHORITIES")
 public class UserAuthority implements GrantedAuthority {
 
@@ -25,14 +24,19 @@ public class UserAuthority implements GrantedAuthority {
     private Long id;
 
     @Column(nullable = false)
-    @Builder.Default
     private String authority = RoleConstants.USER;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @Setter
     private User user;
 
     @NotNull
-    @Builder.Default
     @Setter
     private boolean enabled = false;
+
+    public UserAuthority(String authority, boolean enabled) {
+        this.authority = authority;
+        this.enabled = enabled;
+    }
 }

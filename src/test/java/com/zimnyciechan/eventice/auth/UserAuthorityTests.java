@@ -45,11 +45,11 @@ public class UserAuthorityTests {
                 assertTrue(createdUser.getUsername().equals(TEST_USERNAME));
                 // Check that the user has the default ROLE_USER authority
                 assertNotNull(createdUser.getAuthorities());
-                assert (createdUser.getAuthorities().stream()
+                assertTrue(createdUser.getAuthorities().stream()
                                 .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.USER)));
-                assert (createdUser.getAuthorities().stream()
+                assertTrue(createdUser.getAuthorities().stream()
                                 .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.ADMIN)));
-                assert (createdUser.getAuthorities().stream()
+                assertTrue(createdUser.getAuthorities().stream()
                                 .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.CREATOR)));
 
                 assertTrue(

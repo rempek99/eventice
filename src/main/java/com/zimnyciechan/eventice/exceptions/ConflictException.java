@@ -4,14 +4,14 @@
  *
  */
 
-package com.zimnyciechan.eventice.utils.exceptions;
+package com.zimnyciechan.eventice.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 public class ConflictException extends ResponseStatusException {
 
-    private static final String DEFAULT_MESSAGE= "Data conflicted";
+    private static final String DEFAULT_MESSAGE = "Data conflicted";
 
     private ConflictException(String reason) {
         super(HttpStatus.CONFLICT, reason);

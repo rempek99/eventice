@@ -18,7 +18,7 @@ import com.zimnyciechan.eventice.auth.controller.AuthController;
 import com.zimnyciechan.eventice.auth.model.AuthenticationRequest;
 import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.services.UserService;
-import com.zimnyciechan.eventice.utils.exceptions.NotFoundException;
+import com.zimnyciechan.eventice.exceptions.NotFoundException;
 
 @SpringBootTest
 @SuppressWarnings("null")

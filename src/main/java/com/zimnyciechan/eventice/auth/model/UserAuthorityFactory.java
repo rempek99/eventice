@@ -6,10 +6,10 @@ import com.zimnyciechan.eventice.auth.constants.RoleConstants;
 
 public class UserAuthorityFactory {
 
-    public static Set<UserAuthority> createDefaultAuthoritiesForUser(User user) {
+    public static Set<UserAuthority> createDefaultAuthorities() {
         return Set.of(
-                UserAuthority.builder().authority(RoleConstants.USER).enabled(true).user(user).build(),
-                UserAuthority.builder().authority(RoleConstants.ADMIN).user(user).build(),
-                UserAuthority.builder().authority(RoleConstants.CREATOR).user(user).build());
+                new UserAuthority(RoleConstants.USER, true),
+                new UserAuthority(RoleConstants.ADMIN, false),
+                new UserAuthority(RoleConstants.CREATOR, false));
     }
 }

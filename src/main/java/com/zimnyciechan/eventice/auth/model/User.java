@@ -17,6 +17,7 @@ import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,10 +55,16 @@ public class User implements UserDetails {
 
     @Override
     public Collection<UserAuthority> getAuthorities() {
-        return new HashSet<>(authorities);
+        return Collections.unmodifiableSet(authorities);
     }
 
     public void addAuthorities(Set<UserAuthority> authorities) {
-        this.authorities.addAll(authorities);
+        if (authorities == null) {
+            return;
+        }
+        for (UserAuthority authority : authorities) {
+            authority.setUser(this);
+            this.authorities.add(authority);
+        }
     }
 }
