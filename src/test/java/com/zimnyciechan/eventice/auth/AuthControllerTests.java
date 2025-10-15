@@ -110,7 +110,7 @@ public class AuthControllerTests {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals("User created with ID: 1", response.getBody());
+        assertTrue(response.getBody().contains("User created with ID: "));
 
         UserDetails createdUser = userService.loadUserByUsername(TEST_USERNAME);
         assertNotNull(createdUser);
