@@ -4,7 +4,7 @@
  *
  */
 
-package com.zimnyciechan.eventice.utils.exceptions;
+package com.zimnyciechan.eventice.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
