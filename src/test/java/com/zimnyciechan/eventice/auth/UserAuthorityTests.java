@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.zimnyciechan.eventice.auth.constants.RoleConstants;
 import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.services.UserService;
 
@@ -45,24 +46,27 @@ public class UserAuthorityTests {
                 // Check that the user has the default ROLE_USER authority
                 assertNotNull(createdUser.getAuthorities());
                 assert (createdUser.getAuthorities().stream()
-                                .anyMatch(auth -> auth.getAuthority().equals("USER")));
+                                .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.USER)));
                 assert (createdUser.getAuthorities().stream()
-                                .anyMatch(auth -> auth.getAuthority().equals("ADMIN")));
+                                .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.ADMIN)));
                 assert (createdUser.getAuthorities().stream()
-                                .anyMatch(auth -> auth.getAuthority().equals("CREATOR")));
+                                .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.CREATOR)));
 
                 assertTrue(
-                                createdUser.getAuthorities().stream().filter(auth -> auth.getAuthority().equals("USER"))
+                                createdUser.getAuthorities().stream()
+                                                .filter(auth -> auth.getAuthority().equals(RoleConstants.USER))
                                                 .findFirst()
                                                 .get().isEnabled());
 
                 assertFalse(
                                 createdUser.getAuthorities().stream()
-                                                .filter(auth -> auth.getAuthority().equals("ADMIN")).findFirst()
+                                                .filter(auth -> auth.getAuthority().equals(RoleConstants.ADMIN))
+                                                .findFirst()
                                                 .get().isEnabled());
                 assertFalse(
                                 createdUser.getAuthorities().stream()
-                                                .filter(auth -> auth.getAuthority().equals("CREATOR")).findFirst()
+                                                .filter(auth -> auth.getAuthority().equals(RoleConstants.CREATOR))
+                                                .findFirst()
                                                 .get().isEnabled());
         }
 }

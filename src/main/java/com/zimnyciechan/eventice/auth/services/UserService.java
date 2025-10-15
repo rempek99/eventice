@@ -36,10 +36,9 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Long createUser(@NonNull User user) {
-        User saved = userRepository.save(user);
         Set<UserAuthority> authorities = UserAuthorityFactory.createDefaultAuthoritiesForUser(user);
         user.addAuthorities(authorities);
-        saved = userRepository.save(user);
+        final User saved = userRepository.save(user);
         return saved.getId();
     }
 
