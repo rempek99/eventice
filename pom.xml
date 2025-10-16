@@ -161,6 +161,16 @@
                             <workingDirectory>${frontend.dir}</workingDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>npm-lint</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run lint -- --fix</arguments>
+                            <workingDirectory>${frontend.dir}</workingDirectory>
+                        </configuration>
+                    </execution>
                     <!-- Build the Angular app -->
                     <execution>
                         <id>npm-build</id>
