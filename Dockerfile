@@ -3,6 +3,7 @@ FROM openjdk:21-jdk AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src src
+COPY eventice-frontend eventice-frontend
 
 # Copy Maven wrapper
 COPY mvnw .
