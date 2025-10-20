@@ -1,8 +1,18 @@
-<header>
-  <nav>Eventice App!</nav>
-  <ul>
-    <li><a routerLink="/">Home</a></li>
-    <li><a routerLink="/login">Login</a></li>
-    <li><a routerLink="/register">Register</a></li>
-  </ul>
+<header class="flex justify-around items-center bg-secondary dark:bg-secondary-dark p-1">
+  <div class="text-6xl">🍺</div>
+
+  <div class="flex space-x-20 text-2xl bg-secondary dark:bg-secondary-dark">
+    <a
+      routerLink="/"
+      class="link"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Home
+    </a>
+    <a routerLink="/login" class="link" routerLinkActive="active">Login</a>
+    <a routerLink="/register" class="link" routerLinkActive="active">Register</a>
+    <button class="text-3xl" (click)="toggleTheme()">
+      {{ isDarkModeSign() }}
+    </button>
+  </div>
 </header>

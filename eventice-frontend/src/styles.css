@@ -1,10 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 
-html, body {
+@theme {
+  --color-primary: #023047;
+  --color-primary-dark: #ffb703;
+  --color-secondary: #219ebc;
+  --color-secondary-dark: #8ecae6;
+  --color-background: #8ecae6;
+  --color-background-dark: #023047;
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
 }
 
 * {
-    outline: none;
+  outline: none;
+  @apply font-mono;
 }

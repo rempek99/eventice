@@ -1,12 +1,17 @@
-<h1>Login</h1>
+<h1 class="text-4xl font-bold mb-4">Login</h1>
 <form (submit)="onSubmit()">
   <div>
     <label for="email">Email:</label>
-    <input id="email" type="email" />
+    <input id="email" type="email" class="input-field" />
   </div>
   <div>
     <label for="password">Password:</label>
-    <input type="password" id="password" />
+    <input type="password" id="password" class="input-field" />
   </div>
-  <button type="submit">Login</button>
+  <button
+    type="submit"
+    class="border-secondary dark:border-secondary-dark hover:font-extrabold border-2 p-2 rounded-lg"
+  >
+    Login
+  </button>
 </form>

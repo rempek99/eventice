@@ -1,16 +1,21 @@
-<h1>Register</h1>
+<h1 class="text-4xl font-bold mb-4">Register</h1>
 <form (submit)="onSubmit()">
   <div>
-    <label for="username">Username:</label>
-    <input id="username" type="text" />
+    <label for="username">Username</label>
+    <input id="username" type="text" class="input-field" />
   </div>
   <div>
-    <label for="email">Email:</label>
-    <input id="email" type="email" />
+    <label for="email">Email</label>
+    <input id="email" type="email" class="input-field" />
   </div>
   <div>
-    <label for="password">Password:</label>
-    <input id="password" type="password" />
+    <label for="password">Password</label>
+    <input id="password" type="password" class="input-field" />
   </div>
-  <button type="submit">Register</button>
+  <button
+    type="submit"
+    class="border-secondary dark:border-secondary-dark hover:font-extrabold border-2 p-2 rounded-lg"
+  >
+    Register
+  </button>
 </form>
