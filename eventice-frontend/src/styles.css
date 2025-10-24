@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -9,6 +11,9 @@
   --color-secondary-dark: #8ecae6;
   --color-background: #8ecae6;
   --color-background-dark: #023047;
+
+  --font-handwriting: 'Schoolbell', cursive;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 html,
