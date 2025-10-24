@@ -1,9 +1,11 @@
 name: Test
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+      - develop
+    types: [opened, synchronize, reopened]
 
 jobs:
   build-and-deploy:
