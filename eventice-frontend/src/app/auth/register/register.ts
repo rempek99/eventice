@@ -1,5 +1,5 @@
-import { Component, computed, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 const HASH_SIGNS = ['*', '#', '$', '%', '&', '!', ];
 
@@ -11,36 +11,40 @@ const HASH_SIGNS = ['*', '#', '$', '%', '&', '!', ];
 })
 export class Register {
 
-  username = new FormControl('');
-  password = new FormControl('');
-  email = new FormControl('');
+  applyForm = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+    email: new FormControl('')
+  });
 
+
+  
   passwordStr = signal('');
 
   passwordHash = signal('');
 
   handlePasswordChanged() {
  this.passwordHash.update((h) => {
-        if(this.password.value === null) {
+        if(this.applyForm == null || this.applyForm.value == null || this.applyForm.value.password == null ) {
           return '';
         }
-        if (h.length < this.password.value.length) {
+        if (h.length < this.applyForm.value.password.length) {
           return h + HASH_SIGNS[Math.floor(Math.random() * HASH_SIGNS.length)];
         } else {
-          console.log(h.substring(0, this.password.value.length));
-          return h.substring(0, this.password.value.length);
+          console.log(h.substring(0, this.applyForm.value.password.length));
+          return h.substring(0, this.applyForm.value.password.length);
         }
     });
-  }
+    }
 
   constructor() {
-    this.password.valueChanges.subscribe(() => {
+    this.applyForm.valueChanges.subscribe(() => {
      this.handlePasswordChanged();
   });
 }
 
 onSubmit() {
-  console.log('Form submitted', this.password.value);
+  console.log('Form submitted', this.applyForm.value);
 }
 
 }

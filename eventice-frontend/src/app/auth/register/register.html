@@ -1,21 +1,31 @@
 <h1 class="text-4xl font-bold mb-4 text-shadow-xl">Register</h1>
 <div class="flex justify-around">
-  <form (submit)="onSubmit()" class="flex flex-col max-w-">
+  <form (submit)="onSubmit()" [formGroup]="applyForm" class="flex flex-col max-w-">
     <div>
       <label for="username" class="">Username</label>
-      <input id="username" type="text" class="input-field" [formControl]="username" />
+      <input
+        id="username"
+        type="text"
+        class="input-field"
+        [formControl]="applyForm.controls.username"
+      />
     </div>
     <div>
       <label for="email">Email</label>
-      <input id="email" type="email" class="input-field" [formControl]="email" />
+      <input id="email" type="email" class="input-field" [formControl]="applyForm.controls.email" />
     </div>
     <div>
       <label for="password">Password</label>
-      <input id="password" type="password" class="input-field" [formControl]="password" />
+      <input
+        id="password"
+        type="password"
+        class="input-field"
+        [formControl]="applyForm.controls.password"
+      />
     </div>
     <button
-      type="submit"
       class="border-secondary dark:border-secondary-dark hover:font-extrabold border-2 p-2 rounded-lg px-5 self-center"
+      type="submit"
     >
       Register
     </button>
@@ -71,9 +81,9 @@
         />
       </g>
     </svg>
-    <p class="absolute top-25 left-5 z-10">{{ username.value }}</p>
+    <p class="absolute top-25 left-5 z-10">{{ applyForm.controls.username.value }}</p>
     <div class="h-1 w-45 shadow-b bg-gray-700 rounded-full absolute top-30 left-5"></div>
-    <p class="absolute top-35 left-5 z-10">{{ email.value }}</p>
+    <p class="absolute top-35 left-5 z-10">{{ applyForm.controls.email.value }}</p>
     <div class="h-1 w-45 shadow-b bg-gray-700 rounded-full absolute top-40 left-5"></div>
     <p class="absolute top-45 left-5 z-10">{{ passwordHash() }}</p>
     <div class="h-1 w-45 shadow-b bg-gray-700 rounded-full absolute top-50 left-5"></div>
