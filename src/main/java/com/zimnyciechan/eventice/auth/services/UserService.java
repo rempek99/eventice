@@ -6,12 +6,15 @@
 
 package com.zimnyciechan.eventice.auth.services;
 
+import com.zimnyciechan.eventice.auth.constants.RoleConstants;
+import com.zimnyciechan.eventice.auth.exceptions.InternalServerException;
+import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.model.UserAuthority;
 import com.zimnyciechan.eventice.auth.model.UserAuthorityFactory;
 import com.zimnyciechan.eventice.auth.repositories.IUserRepository;
-import com.zimnyciechan.eventice.exceptions.NotFoundException;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +34,14 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        User found = userRepository.findByUsername(username).orElseThrow(() -> NotFoundException.create("User"));
+        User found = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
         return new org.springframework.security.core.userdetails.User(found.getUsername(),
                 found.getPassword(), found.getAuthorities());
     }
 
     @Transactional
     public Long createUser(@NonNull User user) {
+        // TODO: validation for existing username/email
         Set<UserAuthority> authorities = UserAuthorityFactory.createDefaultAuthorities();
         user.addAuthorities(authorities);
         final User saved = userRepository.save(user);
@@ -45,12 +49,12 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUserByUsername(String username) {
-        User found = userRepository.findByUsername(username).orElseThrow(() -> NotFoundException.create("User"));
+        User found = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
         userRepository.delete(found);
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> NotFoundException.create(id.toString()));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
     }
 
     @Transactional
@@ -64,9 +68,9 @@ public class UserService implements UserDetailsService {
     }
 
     private void modifyUserAuthority(Long userId, String authority, boolean enable) {
-        if (authority == null || authority.isBlank()) {
+        if (authority == null || authority.isBlank() || !RoleConstants.ALL_ROLES.contains(authority)) {
             // TODO: custom exception
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Authority cannot be null or empty");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provided authority is not valid");
         }
         User user = findById(userId);
         UserAuthority userAuthority = user.getAuthorities()
@@ -74,11 +78,16 @@ public class UserService implements UserDetailsService {
                 .filter(auth -> auth.getAuthority().equals(authority))
                 .findFirst()
                 .orElseThrow(
-                        () -> NotFoundException.create("Authority " + authority + " for user " + user.getUsername()));
+                        // Should not happen, all authorities are created on user creation
+                        () -> new InternalServerException());
         if (userAuthority.isEnabled() == enable) {
             return;
         }
         userAuthority.setEnabled(enable);
         userRepository.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

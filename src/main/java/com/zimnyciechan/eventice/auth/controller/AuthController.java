@@ -7,8 +7,6 @@ import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.services.JwtService;
 import com.zimnyciechan.eventice.auth.services.UserService;
 
-import jakarta.validation.ConstraintViolationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,15 +41,9 @@ public class AuthController {
             return new ResponseEntity<>("Password is required", HttpStatus.BAD_REQUEST);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setId(null); // Ensure ID is null for new user creation
         Long createdId = null;
-        try {
-            createdId = userService.createUser(user);
-        } catch (ConstraintViolationException e) {
-            final var sb = new StringBuilder();
-            e.getConstraintViolations()
-                    .forEach(v -> sb.append(v.getPropertyPath()).append(" ").append(v.getMessage()).append("; "));
-            return new ResponseEntity<>("Error creating user: " + sb.toString(), HttpStatus.BAD_REQUEST);
-        }
+        createdId = userService.createUser(user);
         return new ResponseEntity<>("User created with ID: " + createdId, HttpStatus.CREATED);
     }
 
@@ -74,5 +66,4 @@ public class AuthController {
     public String hello() {
         return "Hello, World!";
     }
-
 }

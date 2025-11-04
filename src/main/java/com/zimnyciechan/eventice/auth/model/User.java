@@ -22,7 +22,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "USERS", uniqueConstraints = {
+        @UniqueConstraint(name = "users_username_key", columnNames = "username"),
+        @UniqueConstraint(name = "users_email_key", columnNames = "email")
+})
 @Getter
 @Builder
 @NoArgsConstructor
@@ -30,6 +33,7 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Id
+    @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -38,11 +42,9 @@ public class User implements UserDetails {
     private boolean enabled = true;
 
     @NotNull
-    @Column(unique = true)
     private String username;
 
     @NotNull
-    @Column(unique = true)
     private String email;
 
     @NotNull
