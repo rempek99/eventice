@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.zimnyciechan.eventice.auth.dto.ResponseObject;
+
 import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
@@ -14,7 +16,7 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+    public ResponseEntity<ResponseObject> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         final Throwable rootCause = ex.getRootCause();
         String exceptionMessage = null;
         if (rootCause != null) {
@@ -22,15 +24,15 @@ public class GlobalControllerExceptionHandler {
         }
         final String message = extractMeaningfulMessage(exceptionMessage);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(message);
+                .body(new ResponseObject("Failed", message));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException ex) {
+    public ResponseEntity<ResponseObject> handleConstraintViolation(ConstraintViolationException ex) {
         final String message = extractMeaningfulMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(message);
+                .body(new ResponseObject("Failed", message));
     }
 
     private String extractMeaningfulMessage(String rawMessage) {

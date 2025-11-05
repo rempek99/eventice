@@ -37,8 +37,7 @@ export class AuthService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    // todo 201 code is handled as error - fix it
-    if (error.status === 0) {
+    if (error.status != 200 && error.status != 201) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
     } else {

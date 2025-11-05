@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,11 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.zimnyciechan.eventice.auth.dto.LoginResponse;
+import com.zimnyciechan.eventice.auth.dto.ResponseObject;
 import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.services.UserService;
+import com.zimnyciechan.eventice.utils.LocalDateTimeTypeAdapter;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ActiveProfiles("test")
@@ -50,7 +57,7 @@ public class AuthControllerTests {
         } catch (UserNotFoundException e) {
             // User might not exist, ignore the exception
         }
-        assertThrowsExactly(UserNotFoundException.class, () -> {
+        assertThrowsExactly(UsernameNotFoundException.class, () -> {
             userService.loadUserByUsername(TEST_USERNAME);
         });
     }
@@ -79,6 +86,9 @@ public class AuthControllerTests {
                     }
                 """.formatted(TEST_USERNAME, TEST_PASSWORD);
 
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
         var response = mockMvc.perform(post(REGISTER_URL)
                 .contentType("application/json")
                 .content(body))
@@ -86,7 +96,8 @@ public class AuthControllerTests {
                 .getResponse();
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals("A required field is missing.", response.getContentAsString());
+        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+        assertEquals("A required field is missing.", respObj.getError());
     }
 
     @Test
@@ -104,8 +115,12 @@ public class AuthControllerTests {
                 .andReturn()
                 .getResponse();
 
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals("A required field is missing.", response.getContentAsString());
+        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+        assertEquals("A required field is missing.", respObj.getError());
     }
 
     @Test
@@ -123,7 +138,12 @@ public class AuthControllerTests {
                 .getResponse();
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals("Password is required", response.getContentAsString());
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
+        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+        assertEquals("User not created.", respObj.getMessage());
+        assertEquals("Password is required", respObj.getError());
     }
 
     @Test
@@ -209,8 +229,11 @@ public class AuthControllerTests {
         assertEquals(HttpStatus.OK.value(), loginResponse.getStatus());
         assertNotNull(loginResponse.getContentAsString());
         assertTrue(loginResponse.getContentAsString().length() > 100); // JWT
-
-        String jwt = loginResponse.getContentAsString();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
+        LoginResponse response = gson.fromJson(loginResponse.getContentAsString(), LoginResponse.class);
+        final String jwt = response.getToken();
         String[] jwtParts = jwt.split("\\.");
         assertEquals(3, jwtParts.length);
 
@@ -243,14 +266,18 @@ public class AuthControllerTests {
                     }
                 """.formatted(TEST_USERNAME + "A", TEST_PASSWORD, TEST_EMAIL);
 
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
         var secondResponse = mockMvc.perform(post(REGISTER_URL)
                 .contentType("application/json")
                 .content(body))
                 .andReturn()
                 .getResponse();
+        ResponseObject respObj = gson.fromJson(secondResponse.getContentAsString(), ResponseObject.class);
         assertEquals(HttpStatus.BAD_REQUEST.value(), secondResponse.getStatus());
 
-        assertEquals("Email address already exists.", secondResponse.getContentAsString());
+        assertEquals("Email address already exists.", respObj.getError());
 
         body = """
                     {
@@ -265,6 +292,7 @@ public class AuthControllerTests {
                 .andReturn()
                 .getResponse();
         assertEquals(HttpStatus.BAD_REQUEST.value(), thirdResponse.getStatus());
-        assertEquals("Username already exists.", thirdResponse.getContentAsString());
+        respObj = gson.fromJson(thirdResponse.getContentAsString(), ResponseObject.class);
+        assertEquals("Username already exists.", respObj.getError());
     }
 }
