@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { from, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -11,17 +11,20 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
-  register(email: string, username: string, password: string): void {
+  register(email: string, username: string, password: string): Observable<String> {
     const data = { email, username, password };
-    console.log('Register data:', data);
-    this.http
-      .post<String>('http://localhost:8080/api/register', data)
-      .pipe(catchError(this.handleError))
-      .subscribe((response) => {
-        console.log('Register response:', response);
-      });
-    // todo - register with not unique credentials returns 500 error - fix it
+
+    const result = from(
+      this.http.post<String>('http://localhost:8080/register', data).pipe(
+        map((response) => response as String),
+        catchError(this.handleError)
+      )
+    );
+
+    return result;
   }
+
+  // todo - register with not unique credentials returns 500 error - fix it
 
   login(data: { email: string; password: string }): void {
     const token = this.http
@@ -37,16 +40,7 @@ export class AuthService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.status != 200 && error.status != 201) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(`Backend returned code ${error.status}, body was: `, error.error);
-    }
-    // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return throwError(() => new Error(`${error.error?.error || 'Error occured.'}`));
   }
 
   logout() {

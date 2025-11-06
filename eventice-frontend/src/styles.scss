@@ -1,7 +1,8 @@
+@use "tailwindcss";
+@use '@angular/material' as mat;
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-@import 'tailwindcss';
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -25,4 +26,32 @@ body {
 * {
   outline: none;
   @apply font-mono;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@include mat.snack-bar-overrides((
+button-color: var(--color-primary),
+supporting-text-color: #c5c5c5ff,
+supporting-text-font: var(--font-mono)
+));
+
+
+.snackbar-error {
+  @include mat.snack-bar-overrides((
+  container-color: rgba(148, 7, 59, 0.9),
+  ));
+}
+
+.snackbar-warning {
+  @include mat.snack-bar-overrides((
+  container-color: rgba(143, 97, 11, 0.9),
+  ));
 }

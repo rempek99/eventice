@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth-service';
+import { NotificationService } from '../../util/notification-service';
 
 const HASH_SIGNS = ['*', '#', '$', '%', '&', '!'];
 
@@ -8,7 +9,7 @@ const HASH_SIGNS = ['*', '#', '$', '%', '&', '!'];
   selector: 'app-register',
   imports: [ReactiveFormsModule],
   templateUrl: './register.html',
-  styleUrl: './register.css',
+  styleUrl: './register.scss',
 })
 export class Register {
   applyForm = new FormGroup({
@@ -41,26 +42,27 @@ export class Register {
     });
   }
 
-  constructor() {
+  constructor(private notify: NotificationService) {
     this.applyForm.valueChanges.subscribe(() => {
       this.handlePasswordChanged();
     });
   }
 
   onSubmit() {
-    console.log('Form submitted', this.applyForm.value);
-    this.authService.register(
-      this.applyForm.value.email || '',
-      this.applyForm.value.username || '',
-      this.applyForm.value.password || ''
-    );
-    // .subscribe({
-    //   next: (response) => {
-    //     console.log('Registration successful:', response);
-    //   },
-    //   error: (error) => {
-    //     console.error('Registration failed:', error);
-    //   },
-    // });
+    this.authService
+      .register(
+        this.applyForm.value.email || '',
+        this.applyForm.value.username || '',
+        this.applyForm.value.password || ''
+      )
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          this.notify.show('Registration successful! Please log in.', this.notify.MESSAGE);
+        },
+        error: (err) => {
+          this.notify.show(err.message, this.notify.WARNING);
+        },
+      });
   }
 }
