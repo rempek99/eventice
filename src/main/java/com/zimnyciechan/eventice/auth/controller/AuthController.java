@@ -4,12 +4,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zimnyciechan.eventice.auth.dto.LoginResponse;
 import com.zimnyciechan.eventice.auth.dto.RegisterRequest;
-import com.zimnyciechan.eventice.auth.dto.ResponseObject;
 import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.model.AuthenticationRequest;
 import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.services.JwtService;
 import com.zimnyciechan.eventice.auth.services.UserService;
+import com.zimnyciechan.eventice.core.dto.ResponseObject;
+
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

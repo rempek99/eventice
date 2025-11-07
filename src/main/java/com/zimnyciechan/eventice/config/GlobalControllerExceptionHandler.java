@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.zimnyciechan.eventice.auth.dto.ResponseObject;
+import com.zimnyciechan.eventice.core.dto.ResponseObject;
 
 import jakarta.validation.ConstraintViolationException;
 

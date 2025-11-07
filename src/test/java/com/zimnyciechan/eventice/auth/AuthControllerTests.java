@@ -21,10 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zimnyciechan.eventice.auth.dto.LoginResponse;
-import com.zimnyciechan.eventice.auth.dto.ResponseObject;
 import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.services.UserService;
-import com.zimnyciechan.eventice.utils.LocalDateTimeTypeAdapter;
+import com.zimnyciechan.eventice.core.dto.ResponseObject;
+import com.zimnyciechan.eventice.core.utils.LocalDateTimeTypeAdapter;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ActiveProfiles("test")

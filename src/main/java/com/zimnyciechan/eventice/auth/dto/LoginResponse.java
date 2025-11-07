@@ -1,5 +1,7 @@
 package com.zimnyciechan.eventice.auth.dto;
 
+import com.zimnyciechan.eventice.core.dto.ResponseObject;
+
 import lombok.Getter;
 
 @Getter

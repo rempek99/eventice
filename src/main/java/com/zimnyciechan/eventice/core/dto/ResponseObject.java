@@ -1,4 +1,4 @@
-package com.zimnyciechan.eventice.auth.dto;
+package com.zimnyciechan.eventice.core.dto;
 
 import java.time.LocalDateTime;
 

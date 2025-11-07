@@ -4,7 +4,7 @@
  * 🍺🍺🍺
  */
 
-package com.zimnyciechan.eventice.utils;
+package com.zimnyciechan.eventice.core.utils;
 
 public enum EncryptionAlgorithms {
 

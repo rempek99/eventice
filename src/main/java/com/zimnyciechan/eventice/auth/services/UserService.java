@@ -7,12 +7,12 @@
 package com.zimnyciechan.eventice.auth.services;
 
 import com.zimnyciechan.eventice.auth.constants.RoleConstants;
-import com.zimnyciechan.eventice.auth.exceptions.InternalServerException;
 import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.model.UserAuthority;
 import com.zimnyciechan.eventice.auth.model.UserAuthorityFactory;
 import com.zimnyciechan.eventice.auth.repositories.IUserRepository;
+import com.zimnyciechan.eventice.core.exception.InternalServerException;
 
 import java.util.List;
 import java.util.Set;

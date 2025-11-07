@@ -1,4 +1,4 @@
-package com.zimnyciechan.eventice.utils;
+package com.zimnyciechan.eventice.core.utils;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
