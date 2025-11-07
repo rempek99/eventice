@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    return throwError(() => new Error(`${error.error?.error || 'Error occured.'}`));
+    return throwError(() => new Error(`${error.error?.message || 'Error occured.'}`));
   }
 
   logout() {

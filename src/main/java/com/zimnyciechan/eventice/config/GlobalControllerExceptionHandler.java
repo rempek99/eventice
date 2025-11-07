@@ -24,7 +24,7 @@ public class GlobalControllerExceptionHandler {
         }
         final String message = extractMeaningfulMessage(exceptionMessage);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("Failed", message));
+                .body(new ResponseObject(message));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -32,7 +32,7 @@ public class GlobalControllerExceptionHandler {
     public ResponseEntity<ResponseObject> handleConstraintViolation(ConstraintViolationException ex) {
         final String message = extractMeaningfulMessage(ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("Failed", message));
+                .body(new ResponseObject(message));
     }
 
     private String extractMeaningfulMessage(String rawMessage) {

@@ -97,7 +97,7 @@ public class AuthControllerTests {
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("A required field is missing.", respObj.getError());
+        assertEquals("Validation Failed", respObj.getMessage());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class AuthControllerTests {
                 .create();
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("A required field is missing.", respObj.getError());
+        assertEquals("Validation Failed", respObj.getMessage());
     }
 
     @Test
@@ -142,8 +142,7 @@ public class AuthControllerTests {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .create();
         ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("User not created.", respObj.getMessage());
-        assertEquals("Password is required", respObj.getError());
+        assertEquals("Validation Failed", respObj.getMessage());
     }
 
     @Test
@@ -277,7 +276,7 @@ public class AuthControllerTests {
         ResponseObject respObj = gson.fromJson(secondResponse.getContentAsString(), ResponseObject.class);
         assertEquals(HttpStatus.BAD_REQUEST.value(), secondResponse.getStatus());
 
-        assertEquals("Email address already exists.", respObj.getError());
+        assertEquals("Email address already exists.", respObj.getMessage());
 
         body = """
                     {
@@ -293,6 +292,6 @@ public class AuthControllerTests {
                 .getResponse();
         assertEquals(HttpStatus.BAD_REQUEST.value(), thirdResponse.getStatus());
         respObj = gson.fromJson(thirdResponse.getContentAsString(), ResponseObject.class);
-        assertEquals("Username already exists.", respObj.getError());
+        assertEquals("Username already exists.", respObj.getMessage());
     }
 }

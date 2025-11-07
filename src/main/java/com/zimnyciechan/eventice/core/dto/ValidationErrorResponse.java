@@ -3,12 +3,17 @@ package com.zimnyciechan.eventice.core.dto;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ValidationErrorResponse extends ResponseObject {
-    public ValidationErrorResponse(String message) {
-        super(message);
-        validationErrors = new HashMap<>();
-    }
+import lombok.Getter;
 
+@Getter
+public class ValidationErrorResponse extends ResponseObject {
+
+    private final static String MESSAGE = "Validation error";
+    
     private final Map<String, String> validationErrors;
 
+    public ValidationErrorResponse(Map<String,String> validationErrors) {
+        super(MESSAGE);
+        this.validationErrors = new HashMap<>(validationErrors);
+    }
 }

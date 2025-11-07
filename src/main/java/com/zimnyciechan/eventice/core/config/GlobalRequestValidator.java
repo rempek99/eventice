@@ -23,6 +23,6 @@ public class GlobalRequestValidator {
             errors.append(errorMessage).append("; ");
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("Validation Failed", errors.toString()));
+                .body(new ResponseObject("Validation Failed"));
     }
 }

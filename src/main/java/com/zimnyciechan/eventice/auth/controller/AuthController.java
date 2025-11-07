@@ -43,9 +43,9 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseObject> registerUser(@RequestBody RegisterRequest requestData) {
+    public ResponseEntity<ResponseObject> registerUser(@Valid @RequestBody RegisterRequest requestData) {
         if (requestData.getPassword() == null || requestData.getPassword().isEmpty()) {
-            return new ResponseEntity<>(new ResponseObject("User not created.", "Password is required"),
+            return new ResponseEntity<>(new ResponseObject("Password is required"),
                     HttpStatus.BAD_REQUEST);
         }
         User user = User.builder()
