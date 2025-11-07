@@ -4,11 +4,11 @@ import { Component } from '@angular/core';
   selector: 'app-login',
   imports: [],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.scss',
 })
 export class Login {
-onSubmit(): void {
-  // Handle login logic here
-  console.log('Login form submitted');  
-}
+  onSubmit(): void {
+    // Handle login logic here
+    console.log('Login form submitted');
+  }
 }
