@@ -3,6 +3,7 @@ package com.zimnyciechan.eventice.auth.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zimnyciechan.eventice.auth.dto.LoginResponse;
+import com.zimnyciechan.eventice.auth.dto.RegisterRequest;
 import com.zimnyciechan.eventice.auth.dto.ResponseObject;
 import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.model.AuthenticationRequest;
@@ -40,15 +41,20 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseObject> registerUser(@RequestBody User user) {
-        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+    public ResponseEntity<ResponseObject> registerUser(@RequestBody RegisterRequest requestData) {
+        if (requestData.getPassword() == null || requestData.getPassword().isEmpty()) {
             return new ResponseEntity<>(new ResponseObject("User not created.", "Password is required"),
                     HttpStatus.BAD_REQUEST);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setId(null); // Ensure ID is null for new user creation
+        User user = User.builder()
+                .id(null)
+                .username(requestData.getUsername())
+                .email(requestData.getEmail())
+                .password(passwordEncoder.encode(requestData.getPassword()))
+                .build();
         Long createdId = null;
         createdId = userService.createUser(user);
+        // TODO remove the id from response later!cd
         return new ResponseEntity<>(new ResponseObject("User created with ID: " + createdId), HttpStatus.CREATED);
     }
 
