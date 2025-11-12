@@ -96,7 +96,7 @@ export class Register {
       .subscribe({
         next: (response) => {
           console.log(response);
-          this.notify.show('Registration successful! Please log in.', this.notify.MESSAGE);
+          this.notify.show('Registration successful! Please log in.', this.notify.SUCCESS);
         },
         error: (err) => {
           this.notify.show(err.message, this.notify.WARNING);

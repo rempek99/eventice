@@ -11,6 +11,8 @@ export class NotificationService {
   public readonly MESSAGE = 0;
   public readonly WARNING = 1;
   public readonly ERROR = 2;
+  public readonly SUCCESS = 3;
+
   private readonly DISMISS = 'Dismiss';
 
   show = (message: string, type: number): void => {
@@ -23,6 +25,11 @@ export class NotificationService {
       this.snackbar.openFromComponent(CustomSnackbar, {
         data: { message, action: this.DISMISS },
         panelClass: ['snackbar-error'],
+      });
+    } else if (type === this.SUCCESS) {
+      this.snackbar.openFromComponent(CustomSnackbar, {
+        data: { message, action: this.DISMISS },
+        panelClass: ['snackbar-success'],
       });
     } else {
       this.snackbar.openFromComponent(CustomSnackbar, {
