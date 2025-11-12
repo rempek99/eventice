@@ -40,6 +40,8 @@ export class Register {
 
   private authService = inject(AuthService);
 
+  private notify = inject(NotificationService);
+
   passwordStr = signal('');
 
   passwordHash = signal('');
@@ -58,14 +60,14 @@ export class Register {
     });
   }
 
-  constructor(private notify: NotificationService) {
+  constructor() {
     this.applyForm.valueChanges.subscribe(() => {
       this.handlePasswordChanged();
     });
   }
 
   onSubmit() {
-    if (this.applyForm.invalid === false) {
+    if (this.applyForm.invalid) {
       this.applyForm.markAllAsTouched();
       return;
     }
@@ -76,8 +78,7 @@ export class Register {
         this.applyForm.value.password!
       )
       .subscribe({
-        next: (response) => {
-          console.log(response);
+        next: () => {
           this.notify.show('Registration successful! Please log in.', this.notify.SUCCESS);
         },
         error: (err) => {

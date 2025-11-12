@@ -1,4 +1,4 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MAT_SNACK_BAR_DATA,
   MatSnackBarLabel,
@@ -13,6 +13,6 @@ import {
   styleUrl: './custom-snackbar.scss',
 })
 export class CustomSnackbar {
-  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}
+  public data = inject(MAT_SNACK_BAR_DATA);
   snackBarRef = inject(MatSnackBarRef);
 }

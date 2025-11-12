@@ -7,16 +7,16 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private jwtToken: String | null = null;
+  private jwtToken: string | null = null;
 
   private http = inject(HttpClient);
 
-  register(email: string, username: string, password: string): Observable<String> {
+  register(email: string, username: string, password: string): Observable<string> {
     const data = { email, username, password };
 
     const result = from(
-      this.http.post<String>('http://localhost:8080/register', data).pipe(
-        map((response) => response as String),
+      this.http.post<string>('http://localhost:8080/register', data).pipe(
+        map((response) => response as string),
         catchError(this.handleError)
       )
     );
@@ -28,7 +28,7 @@ export class AuthService {
 
   login(data: { email: string; password: string }): void {
     const token = this.http
-      .post<String>('localhost:8080/api/login', data)
+      .post<string>('localhost:8080/api/login', data)
       .pipe(catchError(this.handleError));
     token.subscribe((token) => {
       this.handleAuth(token as string);
