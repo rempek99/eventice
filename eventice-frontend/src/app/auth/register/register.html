@@ -1,25 +1,30 @@
 <h1 class="text-4xl font-bold mb-4 text-shadow-xl">Register</h1>
 <div class="flex justify-around">
-  <form (submit)="onSubmit()" [formGroup]="applyForm" class="flex flex-col max-w-">
+  <form (submit)="onSubmit()" [formGroup]="applyForm" class="flex flex-col min-w-100">
     <div>
       <label for="username" class="">Username</label>
       <input
         id="username"
         type="text"
-        class="input-field"
+        [ngClass]="{ 'input-field': true, 'error-field': applyForm.controls.username.invalid }"
         [formControl]="applyForm.controls.username"
       />
     </div>
     <div>
       <label for="email">Email</label>
-      <input id="email" type="email" class="input-field" [formControl]="applyForm.controls.email" />
+      <input
+        id="email"
+        type="email"
+        [ngClass]="{ 'input-field': true, 'error-field': applyForm.controls.email.invalid }"
+        [formControl]="applyForm.controls.email"
+      />
     </div>
     <div>
       <label for="password">Password</label>
       <input
         id="password"
         type="password"
-        class="input-field"
+        [ngClass]="{ 'input-field': true, 'error-field': applyForm.controls.password.invalid }"
         [formControl]="applyForm.controls.password"
       />
     </div>
@@ -29,6 +34,25 @@
     >
       Register
     </button>
+    @if ( applyForm.controls.username.invalid || applyForm.controls.email.invalid ||
+    applyForm.controls.password.invalid) {
+    <div class="flex-col border-2 p-3 w-100 my-5">
+      <h2 class="text-xl mb-2">Follow the rules:</h2>
+      <ul>
+        @if(applyForm.controls.username.invalid){
+        <li class="py-2">Username: must contain from 3 to 16 characters</li>
+        } @if(applyForm.controls.email.invalid){
+        <li class="py-2">Email: provide correct email address</li>
+        } @if(applyForm.controls.password.invalid){
+        <li class="py-2">
+          Password: must contain from 6 to 32 characters, including: 1 lowercase letter, 1 capital
+          letter, 1 special character, 1 digit
+        </li>
+        }
+      </ul>
+    </div>
+
+    }
   </form>
   <div class="licence relative bg-gray-500 border-black border-3 w-60 h-70 rounded-xl">
     <p class="absolute top-2 left-2 text-black uppercase">User licence</p>

@@ -1,21 +1,41 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth-service';
 import { NotificationService } from '../../util/notification-service';
+import { CommonModule } from '@angular/common';
 
 const HASH_SIGNS = ['*', '#', '$', '%', '&', '!'];
 
+// @NotNull
+// @Size(min = 3, max = 16)
+// private String username;
+
+// @NotNull
+// @Email
+// private String email;
+
+// @NotNull
+// @Size(min = 6, max = 32)
+// private String password;
+
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
 export class Register {
   applyForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
-    email: new FormControl(''),
+    username: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(16),
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,32}$'),
+    ]),
+    email: new FormControl('', [Validators.email, Validators.required]),
   });
 
   private authService = inject(AuthService);
@@ -49,6 +69,24 @@ export class Register {
   }
 
   onSubmit() {
+    if (this.applyForm.valid === false) {
+      let error = null;
+      error = this.applyForm.controls.username.errors;
+      if (error != null) {
+        console.log('username', error);
+        return;
+      }
+      error = this.applyForm.controls.email.errors;
+      if (error != null) {
+        console.log('email', error);
+        return;
+      }
+      error = this.applyForm.controls.password.errors;
+      if (error != null) {
+        console.log('password', error);
+        return;
+      }
+    }
     this.authService
       .register(
         this.applyForm.value.email || '',
