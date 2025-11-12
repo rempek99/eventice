@@ -6,26 +6,22 @@
 
 package com.zimnyciechan.eventice.auth.services;
 
-import com.zimnyciechan.eventice.auth.constants.RoleConstants;
 import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.model.UserAuthority;
 import com.zimnyciechan.eventice.auth.model.UserAuthorityFactory;
 import com.zimnyciechan.eventice.auth.repositories.IUserRepository;
-import com.zimnyciechan.eventice.core.exception.InternalServerException;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -42,7 +38,6 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Long createUser(@NonNull User user) {
-        // TODO: validation for existing username/email
         Set<UserAuthority> authorities = UserAuthorityFactory.createDefaultAuthorities();
         user.addAuthorities(authorities);
         final User saved = userRepository.save(user);
@@ -68,24 +63,21 @@ public class UserService implements UserDetailsService {
         modifyUserAuthority(userId, authority, false);
     }
 
-    private void modifyUserAuthority(Long userId, String authority, boolean enable) {
-        if (authority == null || authority.isBlank() || !RoleConstants.ALL_ROLES.contains(authority)) {
-            // TODO: custom exception
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provided authority is not valid");
-        }
+    private boolean modifyUserAuthority(Long userId, String authority, boolean enable) {
         User user = findById(userId);
-        UserAuthority userAuthority = user.getAuthorities()
+        Optional<UserAuthority> userAuthorityOptional = user.getAuthorities()
                 .stream()
                 .filter(auth -> auth.getAuthority().equals(authority))
-                .findFirst()
-                .orElseThrow(
-                        // Should not happen, all authorities are created on user creation
-                        () -> new InternalServerException());
-        if (userAuthority.isEnabled() == enable) {
-            return;
+                .findFirst();
+        if(userAuthorityOptional.isEmpty()) {
+            return false;
         }
-        userAuthority.setEnabled(enable);
+        if (userAuthorityOptional.get().isEnabled() == enable) {
+            return false;
+        }
+        userAuthorityOptional.get().setEnabled(enable);
         userRepository.save(user);
+        return true;
     }
 
     public List<User> getAllUsers() {

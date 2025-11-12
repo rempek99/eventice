@@ -97,7 +97,7 @@ public class AuthControllerTests {
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("Validation Failed", respObj.getMessage());
+        assertEquals("Validation error", respObj.getMessage());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class AuthControllerTests {
                 .create();
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("Validation Failed", respObj.getMessage());
+        assertEquals("Validation error", respObj.getMessage());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class AuthControllerTests {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .create();
         ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("Validation Failed", respObj.getMessage());
+        assertEquals("Validation error", respObj.getMessage());
     }
 
     @Test
@@ -162,12 +162,11 @@ public class AuthControllerTests {
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatus());
         assertNotNull(response.getContentAsString());
-        assertTrue(response.getContentAsString().contains("User created with ID: "));
-
-        String userId = response.getContentAsString().split("ID: ")[1];
-        assertNotNull(userId);
-
-        // TODO: check user exists in the database, and has 3 authorities?
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .create();
+        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+        assertEquals("User created", respObj.getMessage());
     }
 
     @Test

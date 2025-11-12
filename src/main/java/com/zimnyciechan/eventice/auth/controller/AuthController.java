@@ -44,20 +44,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseObject> registerUser(@Valid @RequestBody RegisterRequest requestData) {
-        if (requestData.getPassword() == null || requestData.getPassword().isEmpty()) {
-            return new ResponseEntity<>(new ResponseObject("Password is required"),
-                    HttpStatus.BAD_REQUEST);
-        }
         User user = User.builder()
                 .id(null)
                 .username(requestData.getUsername())
                 .email(requestData.getEmail())
                 .password(passwordEncoder.encode(requestData.getPassword()))
-                .build();
-        Long createdId = null;
-        createdId = userService.createUser(user);
-        // TODO remove the id from response later!cd
-        return new ResponseEntity<>(new ResponseObject("User created with ID: " + createdId), HttpStatus.CREATED);
+                .build();;
+        userService.createUser(user);
+        return new ResponseEntity<>(new ResponseObject("User created"), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

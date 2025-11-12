@@ -46,18 +46,14 @@ export class Register {
 
   handlePasswordChanged() {
     this.passwordHash.update((h) => {
-      if (
-        this.applyForm == null ||
-        this.applyForm.value == null ||
-        this.applyForm.value.password == null
-      ) {
+      const password = this.applyForm.value.password;
+      if (!password) {
         return '';
       }
-      if (h.length < this.applyForm.value.password.length) {
+      if (h.length < password.length) {
         return h + HASH_SIGNS[Math.floor(Math.random() * HASH_SIGNS.length)];
       } else {
-        console.log(h.substring(0, this.applyForm.value.password.length));
-        return h.substring(0, this.applyForm.value.password.length);
+        return h.substring(0, password.length);
       }
     });
   }
@@ -69,29 +65,15 @@ export class Register {
   }
 
   onSubmit() {
-    if (this.applyForm.valid === false) {
-      let error = null;
-      error = this.applyForm.controls.username.errors;
-      if (error != null) {
-        console.log('username', error);
-        return;
-      }
-      error = this.applyForm.controls.email.errors;
-      if (error != null) {
-        console.log('email', error);
-        return;
-      }
-      error = this.applyForm.controls.password.errors;
-      if (error != null) {
-        console.log('password', error);
-        return;
-      }
+    if (this.applyForm.invalid === false) {
+      this.applyForm.markAllAsTouched();
+      return;
     }
     this.authService
       .register(
-        this.applyForm.value.email || '',
-        this.applyForm.value.username || '',
-        this.applyForm.value.password || ''
+        this.applyForm.value.email!,
+        this.applyForm.value.username!,
+        this.applyForm.value.password!
       )
       .subscribe({
         next: (response) => {
