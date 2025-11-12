@@ -38,7 +38,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/public/**", "/login", "/register", "/error").permitAll()
+                .requestMatchers("/public/**", "/login", "/register", "/error", "/h2-console/**").permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(
                 session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -49,6 +49,7 @@ public class SecurityConfig {
         // applications using token-based authentication (e.g., JWT) instead of
         // sessions.
         http.csrf(AbstractHttpConfigurer::disable);
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 
         http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 
