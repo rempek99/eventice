@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,10 +29,13 @@ public class UserService implements UserDetailsService {
     private IUserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User found = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
-        return new org.springframework.security.core.userdetails.User(found.getUsername(),
-                found.getPassword(), found.getAuthorities());
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     @Transactional
@@ -69,7 +71,7 @@ public class UserService implements UserDetailsService {
                 .stream()
                 .filter(auth -> auth.getAuthority().equals(authority))
                 .findFirst();
-        if(userAuthorityOptional.isEmpty()) {
+        if (userAuthorityOptional.isEmpty()) {
             return false;
         }
         if (userAuthorityOptional.get().isEnabled() == enable) {
@@ -82,5 +84,9 @@ public class UserService implements UserDetailsService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public User loadUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 }
