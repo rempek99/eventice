@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { from, Observable, throwError } from 'rxjs';
+import { EMPTY, from, Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { NotificationService } from '../../util/notification-service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +12,14 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
+  private notify = inject(NotificationService);
+
   register(email: string, username: string, password: string): Observable<string> {
     const data = { email, username, password };
 
-    const result = from(
-      this.http.post<string>('http://localhost:8080/register', data).pipe(
-        map((response) => response as string),
-        catchError(this.handleError)
-      )
+    const result = this.http.post<string>('http://localhost:8080/register', data).pipe(
+      map((response) => response as string),
+      catchError((error) => this.handleError(error))
     );
 
     return result;
@@ -26,21 +27,26 @@ export class AuthService {
 
   // todo - register with not unique credentials returns 500 error - fix it
 
-  login(data: { email: string; password: string }): void {
-    const token = this.http
-      .post<string>('localhost:8080/api/login', data)
-      .pipe(catchError(this.handleError));
-    token.subscribe((token) => {
-      this.handleAuth(token as string);
-    });
+  login(data: { username: string; password: string }): Observable<boolean> {
+    return this.http.post<any>('http://localhost:8080/login', data).pipe(
+      map((response) => {
+        this.handleAuth(response.token);
+        return true;
+      }),
+      catchError((error) => this.handleError(error))
+    );
   }
 
   private handleAuth(token: string) {
     this.jwtToken = token;
+    localStorage.setItem('id_token', token);
+    console.log(this.jwtToken);
   }
 
   private handleError(error: HttpErrorResponse) {
-    return throwError(() => new Error(`${error.error?.message || 'Error occured.'}`));
+    const errorMessage = `${error.error?.message || 'Error occured.'}`;
+    this.notify.show(errorMessage, this.notify.WARNING);
+    return EMPTY;
   }
 
   logout() {

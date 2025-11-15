@@ -81,9 +81,6 @@ export class Register {
         next: () => {
           this.notify.show('Registration successful! Please log in.', this.notify.SUCCESS);
         },
-        error: (err) => {
-          this.notify.show(err.message, this.notify.WARNING);
-        },
       });
   }
 }
