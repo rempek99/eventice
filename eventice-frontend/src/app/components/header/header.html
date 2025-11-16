@@ -11,6 +11,7 @@
     </a>
     <a routerLink="/login" class="link" routerLinkActive="active">Login</a>
     <a routerLink="/register" class="link" routerLinkActive="active">Register</a>
+    <span class="te">{{ authService.getUsername() }}</span>
     <button class="text-3xl" (click)="toggleTheme()">
       {{ isDarkModeSign() }}
     </button>

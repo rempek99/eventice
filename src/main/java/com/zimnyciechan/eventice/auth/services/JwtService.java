@@ -12,7 +12,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.zimnyciechan.eventice.auth.model.User;
@@ -38,6 +37,7 @@ public class JwtService {
     private String createToken(Map<String, Object> extraClaims, User userDetails) {
         return Jwts.builder()
                 .setClaims(extraClaims)
+                .setClaims(Map.of("username", userDetails.getUsername()))
                 .setSubject(String.valueOf(userDetails.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
