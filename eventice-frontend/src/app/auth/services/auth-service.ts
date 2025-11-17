@@ -49,6 +49,10 @@ export class AuthService {
     localStorage.removeItem('id_token');
   }
 
+  getRawToken(): string | null {
+    return localStorage.getItem('id_token');
+  }
+
   getToken(): any | null {
     const token = localStorage.getItem('id_token');
     if (!token) {
