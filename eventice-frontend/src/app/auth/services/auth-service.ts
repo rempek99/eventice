@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NotificationService } from '../../util/notification-service';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -45,8 +45,23 @@ export class AuthService {
     return EMPTY;
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('id_token');
+  private invalidateToken(): void {
+    localStorage.removeItem('id_token');
+  }
+
+  getToken(): any | null {
+    const token = localStorage.getItem('id_token');
+    if (!token) {
+      return null;
+    }
+    const payload: JwtPayload = jwtDecode(token);
+    const expireAt: Date = new Date((payload.exp || 0) * 1000);
+    const now: Date = new Date();
+    if (now > expireAt) {
+      this.invalidateToken();
+      return null;
+    }
+    return payload;
   }
 
   getUsername(): string | null {
@@ -54,7 +69,6 @@ export class AuthService {
     if (!token) {
       return null;
     }
-    const payload: any = jwtDecode(token);
-    return payload.username;
+    return token.username;
   }
 }
