@@ -12,8 +12,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.zimnyciechan.eventice.auth.model.User;
 
 import java.security.Key;
 import java.util.Date;
@@ -29,14 +30,15 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long JWT_EXPIRATION;
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User userDetails) {
         return createToken(Map.of(), userDetails);
     }
 
-    private String createToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    private String createToken(Map<String, Object> extraClaims, User userDetails) {
         return Jwts.builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setClaims(Map.of("username", userDetails.getUsername()))
+                .setSubject(String.valueOf(userDetails.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -57,13 +59,17 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public Long extractId(String token) {
+        try {
+            return Long.parseLong(extractClaim(token, Claims::getSubject));
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    public boolean isTokenValid(String token, User userDetails) {
+        final Long username = extractId(token);
+        return (username.equals(userDetails.getId())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

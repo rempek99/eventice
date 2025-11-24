@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +48,8 @@ public class AuthController {
                 .username(requestData.getUsername())
                 .email(requestData.getEmail())
                 .password(passwordEncoder.encode(requestData.getPassword()))
-                .build();;
+                .build();
+        ;
         userService.createUser(user);
         return new ResponseEntity<>(new ResponseObject("User created"), HttpStatus.CREATED);
     }
@@ -64,9 +64,9 @@ public class AuthController {
         } catch (AuthenticationException ex) {
             return new ResponseEntity<>(new LoginResponse(null), HttpStatus.FORBIDDEN);
         }
-        UserDetails userDetails;
+        User userDetails;
         try {
-            userDetails = userService.loadUserByUsername(request.getUsername());
+            userDetails = userService.getUserByUsername(request.getUsername());
         } catch (UserNotFoundException ex) {
             return new ResponseEntity<>(new LoginResponse(null), HttpStatus.FORBIDDEN);
         }

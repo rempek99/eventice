@@ -1,6 +1,7 @@
 import { Component, computed, InjectionToken, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { inject } from '@angular/core';
+import { AuthService } from '../../auth/services/auth-service';
 
 export const BROWSER_STORAGE = new InjectionToken<Storage>('Browser Storage', {
   providedIn: 'root',
@@ -15,6 +16,7 @@ export const BROWSER_STORAGE = new InjectionToken<Storage>('Browser Storage', {
 })
 export class Header {
   public localStorage = inject(BROWSER_STORAGE);
+  authService = inject(AuthService);
 
   constructor() {
     if (

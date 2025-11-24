@@ -57,7 +57,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<UserAuthority> getAuthorities() {
-        return Collections.unmodifiableSet(authorities);
+        return authorities.stream()
+                .filter(a -> a.isEnabled())
+                .toList();
     }
 
     public void addAuthorities(Set<UserAuthority> authorities) {

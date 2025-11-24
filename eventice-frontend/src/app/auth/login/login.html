@@ -1,12 +1,22 @@
 <h1 class="text-4xl font-bold mb-4">Login</h1>
-<form (submit)="onSubmit()">
+<form (submit)="onSubmit()" [formGroup]="loginForm">
   <div>
     <label for="email">Email:</label>
-    <input id="email" type="email" class="input-field" />
+    <input
+      id="email"
+      type="email"
+      class="input-field"
+      [formControl]="loginForm.controls.username"
+    />
   </div>
   <div>
     <label for="password">Password:</label>
-    <input type="password" id="password" class="input-field" />
+    <input
+      type="password"
+      id="password"
+      class="input-field"
+      [formControl]="loginForm.controls.password"
+    />
   </div>
   <button
     type="submit"
