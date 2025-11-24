@@ -1,9 +1,17 @@
-import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NotificationService } from '../../util/notification-service';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
+
+interface EventiceJwtPayload extends JwtPayload {
+  username: string;
+}
+
+interface LoginResponse {
+  token: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -25,9 +33,9 @@ export class AuthService {
   }
 
   login(data: { username: string; password: string }): Observable<boolean> {
-    return this.http.post<any>('http://localhost:8080/login', data).pipe(
+    return this.http.post<LoginResponse>('http://localhost:8080/login', data).pipe(
       map((response) => {
-        this.handleAuth(response.token, response.username);
+        this.handleAuth(response.token);
         this.notify.show('Logged Succesfully', this.notify.SUCCESS);
         return true;
       }),
@@ -35,7 +43,7 @@ export class AuthService {
     );
   }
 
-  private handleAuth(token: string, username: string) {
+  private handleAuth(token: string) {
     localStorage.setItem('id_token', token);
   }
 
@@ -53,12 +61,12 @@ export class AuthService {
     return localStorage.getItem('id_token');
   }
 
-  getToken(): any | null {
+  getToken(): EventiceJwtPayload | null {
     const token = localStorage.getItem('id_token');
     if (!token) {
       return null;
     }
-    const payload: JwtPayload = jwtDecode(token);
+    const payload: EventiceJwtPayload = jwtDecode(token);
     const expireAt: Date = new Date((payload.exp || 0) * 1000);
     const now: Date = new Date();
     if (now > expireAt) {
