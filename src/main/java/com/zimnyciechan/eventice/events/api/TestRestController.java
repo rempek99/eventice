@@ -6,35 +6,38 @@
 
 package com.zimnyciechan.eventice.events.api;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zimnyciechan.eventice.auth.constants.RoleConstants;
+import com.zimnyciechan.eventice.core.dto.ResponseObject;
 
 @RestController
 public class TestRestController {
 
     @GetMapping("test")
-    public String testRequest() {
-        return "Hello World!, dupa biskupa";
+    public ResponseEntity<ResponseObject> testRequest() {
+        return new ResponseEntity<>(new ResponseObject("Hello World!, dupa biskupa"), HttpStatus.OK);
     }
 
     @GetMapping("test-admin")
     @PreAuthorize(RoleConstants.HAS_ROLE_ADMIN)
-    public String testAdmin() {
-        return "Hello Admin!";
+    public ResponseEntity<ResponseObject> testAdmin() {
+        return new ResponseEntity<>(new ResponseObject("Hello Admin!"), HttpStatus.OK);
     }
 
     @GetMapping("test-user")
     @PreAuthorize(RoleConstants.HAS_ROLE_USER)
-    public String testUser() {
-        return "Hello User!";
+    public ResponseEntity<ResponseObject> testUser() {
+        return new ResponseEntity<>(new ResponseObject("Hello User!"), HttpStatus.OK);
     }
 
     @GetMapping("test-creator")
     @PreAuthorize(RoleConstants.HAS_ROLE_CREATOR)
-    public String testCreator() {
-        return "Hello Creator!";
+    public ResponseEntity<ResponseObject> testCreator() {
+        return new ResponseEntity<>(new ResponseObject("Hello Creator!"), HttpStatus.OK);
     }
 }

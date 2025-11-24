@@ -1,5 +1,5 @@
-@import '../../../styles.css';
-@import 'tailwindcss';
+@use '../../../styles.scss';
+@use 'tailwindcss';
 
 .input-field {
   @apply border-secondary dark:border-secondary-dark border-2 p-2 rounded-lg w-full mb-4;

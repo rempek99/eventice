@@ -4,6 +4,12 @@
 - Started 31.03.2025
 - Cheers
 
+## Stack
+
+- 🗃️ DB: PostgreSQL
+- 🛠️ BackEnd: String Boot
+- 💻 FrontEnd: AngularJS
+
 ## Main Project Mile Stones
 
 - Application backend is implemented using Spring Boot ✅

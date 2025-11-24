@@ -1,0 +1,13 @@
+@use '../../../styles.scss';
+
+.input-field {
+  @apply border-secondary dark:border-secondary-dark border-2 p-2 rounded-lg w-full mb-4 shadow-xl/30;
+}
+
+.error-field {
+  @apply border-red-700;
+}
+
+.licence * {
+  @apply font-handwriting text-black;
+}

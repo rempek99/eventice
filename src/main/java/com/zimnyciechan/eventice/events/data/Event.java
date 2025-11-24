@@ -16,7 +16,7 @@ import lombok.Data;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_seq_gen")
     private Long id;
 
     private String name;

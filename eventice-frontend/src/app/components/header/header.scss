@@ -1,5 +1,4 @@
-@import 'tailwindcss';
-@import '../../../styles.css';
+@use '../../../styles.scss';
 
 .link {
   @apply hover:font-bold;

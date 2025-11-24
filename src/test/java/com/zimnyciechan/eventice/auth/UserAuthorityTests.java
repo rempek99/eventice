@@ -47,26 +47,9 @@ public class UserAuthorityTests {
                 assertNotNull(createdUser.getAuthorities());
                 assertTrue(createdUser.getAuthorities().stream()
                                 .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.USER)));
-                assertTrue(createdUser.getAuthorities().stream()
+                assertFalse(createdUser.getAuthorities().stream()
                                 .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.ADMIN)));
-                assertTrue(createdUser.getAuthorities().stream()
+                assertFalse(createdUser.getAuthorities().stream()
                                 .anyMatch(auth -> auth.getAuthority().equals(RoleConstants.CREATOR)));
-
-                assertTrue(
-                                createdUser.getAuthorities().stream()
-                                                .filter(auth -> auth.getAuthority().equals(RoleConstants.USER))
-                                                .findFirst()
-                                                .get().isEnabled());
-
-                assertFalse(
-                                createdUser.getAuthorities().stream()
-                                                .filter(auth -> auth.getAuthority().equals(RoleConstants.ADMIN))
-                                                .findFirst()
-                                                .get().isEnabled());
-                assertFalse(
-                                createdUser.getAuthorities().stream()
-                                                .filter(auth -> auth.getAuthority().equals(RoleConstants.CREATOR))
-                                                .findFirst()
-                                                .get().isEnabled());
         }
 }

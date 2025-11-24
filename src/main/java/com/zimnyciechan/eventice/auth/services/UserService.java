@@ -6,22 +6,21 @@
 
 package com.zimnyciechan.eventice.auth.services;
 
+import com.zimnyciechan.eventice.auth.exceptions.UserNotFoundException;
 import com.zimnyciechan.eventice.auth.model.User;
 import com.zimnyciechan.eventice.auth.model.UserAuthority;
 import com.zimnyciechan.eventice.auth.model.UserAuthorityFactory;
 import com.zimnyciechan.eventice.auth.repositories.IUserRepository;
-import com.zimnyciechan.eventice.exceptions.NotFoundException;
-
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,10 +29,13 @@ public class UserService implements UserDetailsService {
     private IUserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        User found = userRepository.findByUsername(username).orElseThrow(() -> NotFoundException.create("User"));
-        return new org.springframework.security.core.userdetails.User(found.getUsername(),
-                found.getPassword(), found.getAuthorities());
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     @Transactional
@@ -45,12 +47,12 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUserByUsername(String username) {
-        User found = userRepository.findByUsername(username).orElseThrow(() -> NotFoundException.create("User"));
+        User found = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException());
         userRepository.delete(found);
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> NotFoundException.create(id.toString()));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
     }
 
     @Transactional
@@ -63,22 +65,28 @@ public class UserService implements UserDetailsService {
         modifyUserAuthority(userId, authority, false);
     }
 
-    private void modifyUserAuthority(Long userId, String authority, boolean enable) {
-        if (authority == null || authority.isBlank()) {
-            // TODO: custom exception
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Authority cannot be null or empty");
-        }
+    private boolean modifyUserAuthority(Long userId, String authority, boolean enable) {
         User user = findById(userId);
-        UserAuthority userAuthority = user.getAuthorities()
+        Optional<UserAuthority> userAuthorityOptional = user.getAuthorities()
                 .stream()
                 .filter(auth -> auth.getAuthority().equals(authority))
-                .findFirst()
-                .orElseThrow(
-                        () -> NotFoundException.create("Authority " + authority + " for user " + user.getUsername()));
-        if (userAuthority.isEnabled() == enable) {
-            return;
+                .findFirst();
+        if (userAuthorityOptional.isEmpty()) {
+            return false;
         }
-        userAuthority.setEnabled(enable);
+        if (userAuthorityOptional.get().isEnabled() == enable) {
+            return false;
+        }
+        userAuthorityOptional.get().setEnabled(enable);
         userRepository.save(user);
+        return true;
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User loadUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 }
