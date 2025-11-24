@@ -31,266 +31,266 @@ import com.zimnyciechan.eventice.core.utils.LocalDateTimeTypeAdapter;
 @AutoConfigureMockMvc(addFilters = false)
 public class AuthControllerTests {
 
-    private static final String LOGIN_URL = "/login";
-    private static final String REGISTER_URL = "/register";
+        private static final String LOGIN_URL = "/login";
+        private static final String REGISTER_URL = "/register";
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @Autowired
-    private UserService userService;
+        @Autowired
+        private UserService userService;
 
-    private final String TEST_USERNAME = "testuser";
-    private final String TEST_PASSWORD = "testpassword";
-    private final String TEST_EMAIL = "testuser@example.com";
+        private final String TEST_USERNAME = "testuser";
+        private final String TEST_PASSWORD = "Testpassword123!";
+        private final String TEST_EMAIL = "testuser@example.com";
 
-    @Test
-    public void contextLoads() {
-        assertNotNull(mockMvc);
-    }
-
-    @BeforeEach
-    public void setUp() {
-        // Delete test user if exists
-        try {
-            userService.deleteUserByUsername(TEST_USERNAME);
-        } catch (UserNotFoundException e) {
-            // User might not exist, ignore the exception
+        @Test
+        public void contextLoads() {
+                assertNotNull(mockMvc);
         }
-        assertThrowsExactly(UsernameNotFoundException.class, () -> {
-            userService.loadUserByUsername(TEST_USERNAME);
-        });
-    }
 
-    @Test
-    public void testLoginFailed() throws Exception {
-        String body = """
-                    {"username":"%s","password":"%s"}
-                """.formatted(TEST_USERNAME, TEST_PASSWORD);
+        @BeforeEach
+        public void setUp() {
+                // Delete test user if exists
+                try {
+                        userService.deleteUserByUsername(TEST_USERNAME);
+                } catch (UserNotFoundException e) {
+                        // User might not exist, ignore the exception
+                }
+                assertThrowsExactly(UsernameNotFoundException.class, () -> {
+                        userService.loadUserByUsername(TEST_USERNAME);
+                });
+        }
 
-        var response = mockMvc.perform(post(LOGIN_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
+        @Test
+        public void testLoginFailed() throws Exception {
+                String body = """
+                                    {"username":"%s","password":"%s"}
+                                """.formatted(TEST_USERNAME, TEST_PASSWORD);
 
-        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
-    }
+                var response = mockMvc.perform(post(LOGIN_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    public void registerUserMissingEmailFailed() throws Exception {
-        String body = """
-                    {
-                     "username":"%s",
-                     "password":"%s"
-                    }
-                """.formatted(TEST_USERNAME, TEST_PASSWORD);
+                assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
+        }
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .create();
-        var response = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
+        @Test
+        public void registerUserMissingEmailFailed() throws Exception {
+                String body = """
+                                    {
+                                     "username":"%s",
+                                     "password":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME, TEST_PASSWORD);
 
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("Validation error", respObj.getMessage());
-    }
+                Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                                .create();
+                var response = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    public void registerUserMissingUsernameFailed() throws Exception {
-        String body = """
-                    {
-                     "password":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_PASSWORD, TEST_EMAIL);
+                assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+                ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+                assertEquals("Validation error", respObj.getMessage());
+        }
 
-        var response = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
+        @Test
+        public void registerUserMissingUsernameFailed() throws Exception {
+                String body = """
+                                    {
+                                     "password":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_PASSWORD, TEST_EMAIL);
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .create();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("Validation error", respObj.getMessage());
-    }
+                var response = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    public void registerUserMissingPasswordFailed() throws Exception {
-        String body = """
-                    {
-                     "username":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_USERNAME, TEST_EMAIL);
-        var response = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
+                Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                                .create();
+                assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+                ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+                assertEquals("Validation error", respObj.getMessage());
+        }
 
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .create();
-        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("Validation error", respObj.getMessage());
-    }
+        @Test
+        public void registerUserMissingPasswordFailed() throws Exception {
+                String body = """
+                                    {
+                                     "username":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME, TEST_EMAIL);
+                var response = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    public void registerUser() throws Exception {
-        String body = """
-                    {
-                     "username":"%s",
-                     "password":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
-        var response = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
+                assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+                Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                                .create();
+                ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+                assertEquals("Validation error", respObj.getMessage());
+        }
 
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertNotNull(response.getContentAsString());
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .create();
-        ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
-        assertEquals("User created", respObj.getMessage());
-    }
+        @Test
+        public void registerUser() throws Exception {
+                String body = """
+                                    {
+                                     "username":"%s",
+                                     "password":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
+                var response = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    public void registerAndLoginUser() throws Exception {
-        String body = """
-                    {
-                     "username":"%s",
-                     "password":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
-        var registerResponse = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
-        assertEquals(HttpStatus.CREATED.value(), registerResponse.getStatus());
-        var loginResponse = mockMvc.perform(post(LOGIN_URL)
-                .contentType("application/json")
-                .content("""
-                            {
-                             "username":"%s",
-                             "password":"%s"
-                            }
-                        """.formatted(TEST_USERNAME, TEST_PASSWORD)))
-                .andReturn()
-                .getResponse();
-        assertEquals(HttpStatus.OK.value(), loginResponse.getStatus());
-        assertNotNull(loginResponse.getContentAsString());
-        assertTrue(loginResponse.getContentAsString().length() > 100); // JWT
-    }
+                assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+                assertNotNull(response.getContentAsString());
+                Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                                .create();
+                ResponseObject respObj = gson.fromJson(response.getContentAsString(), ResponseObject.class);
+                assertEquals("User created", respObj.getMessage());
+        }
 
-    @Test
-    public void jwtClaims() throws Exception {
-        String body = """
-                    {
-                     "username":"%s",
-                     "password":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
-        var registerResponse = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
-        assertEquals(HttpStatus.CREATED.value(), registerResponse.getStatus());
-        var loginResponse = mockMvc.perform(post(LOGIN_URL)
-                .contentType("application/json")
-                .content("""
-                            {
-                             "username":"%s",
-                             "password":"%s"
-                            }
-                        """.formatted(TEST_USERNAME, TEST_PASSWORD)))
-                .andReturn()
-                .getResponse();
-        assertEquals(HttpStatus.OK.value(), loginResponse.getStatus());
-        assertNotNull(loginResponse.getContentAsString());
-        assertTrue(loginResponse.getContentAsString().length() > 100); // JWT
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .create();
-        LoginResponse response = gson.fromJson(loginResponse.getContentAsString(), LoginResponse.class);
-        final String jwt = response.getToken();
-        String[] jwtParts = jwt.split("\\.");
-        assertEquals(3, jwtParts.length);
+        @Test
+        public void registerAndLoginUser() throws Exception {
+                String body = """
+                                    {
+                                     "username":"%s",
+                                     "password":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
+                var registerResponse = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
+                assertEquals(HttpStatus.CREATED.value(), registerResponse.getStatus());
+                var loginResponse = mockMvc.perform(post(LOGIN_URL)
+                                .contentType("application/json")
+                                .content("""
+                                                    {
+                                                     "username":"%s",
+                                                     "password":"%s"
+                                                    }
+                                                """.formatted(TEST_USERNAME, TEST_PASSWORD)))
+                                .andReturn()
+                                .getResponse();
+                assertEquals(HttpStatus.OK.value(), loginResponse.getStatus());
+                assertNotNull(loginResponse.getContentAsString());
+                assertTrue(loginResponse.getContentAsString().length() > 100); // JWT
+        }
 
-        String claimsJson = new String(java.util.Base64.getUrlDecoder().decode(jwtParts[1]));
-        assertTrue(claimsJson.contains("\"sub\":\"" + TEST_USERNAME + "\""));
-    }
+        @Test
+        public void jwtClaims() throws Exception {
+                String body = """
+                                    {
+                                     "username":"%s",
+                                     "password":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
+                var registerResponse = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
+                assertEquals(HttpStatus.CREATED.value(), registerResponse.getStatus());
+                var loginResponse = mockMvc.perform(post(LOGIN_URL)
+                                .contentType("application/json")
+                                .content("""
+                                                    {
+                                                     "username":"%s",
+                                                     "password":"%s"
+                                                    }
+                                                """.formatted(TEST_USERNAME, TEST_PASSWORD)))
+                                .andReturn()
+                                .getResponse();
+                assertEquals(HttpStatus.OK.value(), loginResponse.getStatus());
+                assertNotNull(loginResponse.getContentAsString());
+                assertTrue(loginResponse.getContentAsString().length() > 100); // JWT
+                Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                                .create();
+                LoginResponse response = gson.fromJson(loginResponse.getContentAsString(), LoginResponse.class);
+                final String jwt = response.getToken();
+                String[] jwtParts = jwt.split("\\.");
+                assertEquals(3, jwtParts.length);
 
-    @Test
-    public void registerDuplicateUserFailed() throws Exception {
-        String body = """
-                    {
-                     "username":"%s",
-                     "password":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
-        var registerResponse = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
+                String claimsJson = new String(java.util.Base64.getUrlDecoder().decode(jwtParts[1]));
+                assertTrue(claimsJson.contains("\"username\":\"" + TEST_USERNAME + "\""));
+        }
 
-        assertEquals(HttpStatus.CREATED.value(), registerResponse.getStatus());
+        @Test
+        public void registerDuplicateUserFailed() throws Exception {
+                String body = """
+                                    {
+                                     "username":"%s",
+                                     "password":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL);
+                var registerResponse = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
 
-        body = """
-                    {
-                     "username":"%s",
-                     "password":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_USERNAME + "A", TEST_PASSWORD, TEST_EMAIL);
+                assertEquals(HttpStatus.CREATED.value(), registerResponse.getStatus());
 
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                .create();
-        var secondResponse = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
-        ResponseObject respObj = gson.fromJson(secondResponse.getContentAsString(), ResponseObject.class);
-        assertEquals(HttpStatus.BAD_REQUEST.value(), secondResponse.getStatus());
+                body = """
+                                    {
+                                     "username":"%s",
+                                     "password":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME + "A", TEST_PASSWORD, TEST_EMAIL);
 
-        assertEquals("Email address already exists.", respObj.getMessage());
+                Gson gson = new GsonBuilder()
+                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                                .create();
+                var secondResponse = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
+                ResponseObject respObj = gson.fromJson(secondResponse.getContentAsString(), ResponseObject.class);
+                assertEquals(HttpStatus.BAD_REQUEST.value(), secondResponse.getStatus());
 
-        body = """
-                    {
-                     "username":"%s",
-                     "password":"%s",
-                     "email":"%s"
-                    }
-                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL + "A");
-        var thirdResponse = mockMvc.perform(post(REGISTER_URL)
-                .contentType("application/json")
-                .content(body))
-                .andReturn()
-                .getResponse();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), thirdResponse.getStatus());
-        respObj = gson.fromJson(thirdResponse.getContentAsString(), ResponseObject.class);
-        assertEquals("Username already exists.", respObj.getMessage());
-    }
+                assertEquals("Email address already exists.", respObj.getMessage());
+
+                body = """
+                                    {
+                                     "username":"%s",
+                                     "password":"%s",
+                                     "email":"%s"
+                                    }
+                                """.formatted(TEST_USERNAME, TEST_PASSWORD, TEST_EMAIL + "A");
+                var thirdResponse = mockMvc.perform(post(REGISTER_URL)
+                                .contentType("application/json")
+                                .content(body))
+                                .andReturn()
+                                .getResponse();
+                assertEquals(HttpStatus.BAD_REQUEST.value(), thirdResponse.getStatus());
+                respObj = gson.fromJson(thirdResponse.getContentAsString(), ResponseObject.class);
+                assertEquals("Username already exists.", respObj.getMessage());
+        }
 }
