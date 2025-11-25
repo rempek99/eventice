@@ -1,0 +1,16 @@
+services:
+  db:
+    build:
+      context: ./db/
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+  backend:
+    depends_on:
+      - db
+    build: ./eventice-backend/
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
