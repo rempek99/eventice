@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-EventiceApplication<eventice>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.zimnyciechan.eventice.EventiceApplication",
+            "projectName": "eventice",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
