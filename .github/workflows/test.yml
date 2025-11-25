@@ -34,4 +34,5 @@ jobs:
 
       # 4. Build JAR with Maven (including tests)
       - name: Build JAR with Maven
+        working-directory: ./eventice-backend/
         run: mvn --batch-mode clean package
