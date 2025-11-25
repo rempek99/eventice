@@ -5,7 +5,7 @@ LOCAL_ENV=./local.env
 if [ -f $LOCAL_ENV ] ; then
     echo "Reading envs from $LOCAL_ENV"
     set -a;
-    . ./local.env;
+    . $LOCAL_ENV
     set +a;
 else
     echo "$LOCAL_ENV file not found"

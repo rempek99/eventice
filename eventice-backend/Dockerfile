@@ -5,9 +5,10 @@ RUN mvn package -DskipTests
 FROM ubuntu/jre:21-24.04_stable
 COPY --from=build target/*.jar /app/app.jar
 
+ENV POSTGRES_USER=zimny
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=EVENTICE_DB
 ENV DB_URL=jdbc:postgresql://localhost:5432/backend_database
-ENV DB_USERNAME=username
-ENV DB_PASSWORD=password
 
 WORKDIR /app
 
