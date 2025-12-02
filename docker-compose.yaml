@@ -14,3 +14,10 @@ services:
       - "8080:8080"
     env_file:
       - .env
+  frontend:
+    build:
+      context: ./eventice-frontend/
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4200:4200
