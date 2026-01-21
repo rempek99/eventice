@@ -4,11 +4,10 @@ on:
   pull_request:
     branches:
       - main
-      - develop
     types: [opened, synchronize, reopened]
 
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,17 +21,9 @@ jobs:
         with:
           java-version: "25"
           distribution: "temurin"
+          cache: maven
 
-      # 3. Cache Maven dependencies
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      # 4. Build JAR with Maven (including tests)
+      # 3. Build JAR with Maven (including tests)
       - name: Build JAR with Maven
         working-directory: ./eventice-backend/
-        run: mvn --batch-mode clean package
+        run: mvn --batch-mode --update-snapshots verify

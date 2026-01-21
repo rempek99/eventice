@@ -1,6 +1,6 @@
-FROM maven:3.9-amazoncorretto-25 as build
+FROM maven:3.9-amazoncorretto-25 AS build
 COPY . .
-RUN mvn package -DskipTests
+RUN mvn package
 
 FROM ubuntu/jre:21-24.04_stable
 COPY --from=build target/*.jar /app/app.jar

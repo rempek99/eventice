@@ -1,19 +1,28 @@
-name: Build Test and Push Application
+name: Build Test and Push Docker Image
 on:
   push:
     branches:
       - main
   pull_request:
-    branches: [main]
+    branches: [main, 52-github-actions-improvement]
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: debug envs
+        run: |
+          echo "Dockerhub username variable: $DOCKERHUB_USERNAME"
+          echo "GitHub token: $GITHUB_TOKEN"
+        env:
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
+          # username: zimnyciechan
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -22,5 +31,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: ./eventice-backend
           push: true
-          tags: user/app:latest
+          tags: zimnyciechan/eventice-backend:latest
