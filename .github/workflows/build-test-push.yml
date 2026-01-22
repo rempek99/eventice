@@ -30,7 +30,7 @@ jobs:
       - name: Extract Frontend Version
         id: extract_version_frontend
         run: |
-          VERSION=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' eventice-frontend/package.json)
+          VERSION=$(node -p "require('./eventice-frontend/package.json').version")
           echo "VERSION=$VERSION"
           echo "version_frontend=$VERSION" >> $GITHUB_ENV
       - name: Login to GitHub Container Registry
