@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - main
-      - 52-github-actions-improvement
-  pull_request:
-    branches: [main]
 jobs:
   docker:
     runs-on: ubuntu-latest
