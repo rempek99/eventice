@@ -9,13 +9,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: debug envs
-        run: |
-          echo "Dockerhub username variable: $DOCKERHUB_USERNAME"
-          echo "Dockerhub token: $DOCKERHUB_TOKEN"
-        env:
-          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN}}
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
       - name: Extract Backend Version
