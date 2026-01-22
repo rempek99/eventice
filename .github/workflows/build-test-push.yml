@@ -22,11 +22,17 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
       - name: Extract Backend Version
-        id: extract_version
+        id: extract_version_backend
         run: |
           VERSION=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' eventice-backend/pom.xml)
           echo "VERSION=$VERSION"
-          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version_backend=$VERSION" >> $GITHUB_ENV
+      - name: Extract Frontend Version
+        id: extract_version_frontend
+        run: |
+          VERSION=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' eventice-frontend/package.json)
+          echo "VERSION=$VERSION"
+          echo "version_frontend=$VERSION" >> $GITHUB_ENV
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -41,10 +47,10 @@ jobs:
         with:
           context: ./eventice-backend
           push: true
-          tags: zimnyciechan/eventice-backend:${{ env.version }}
+          tags: zimnyciechan/eventice-backend:${{ env.version_backend }}
       - name: Build and push frontend
         uses: docker/build-push-action@v6
         with:
           context: ./eventice-frontend
           push: true
-          tags: zimnyciechan/eventice-frontend:${{ env.version }}
+          tags: zimnyciechan/eventice-frontend:${{ env.version_frontend }}
