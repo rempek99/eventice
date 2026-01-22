@@ -24,7 +24,7 @@ jobs:
       - name: Extract Backend Version
         id: extract_version
         run: |
-          VERSION=$(xmllint --xpath "string(//project/version)" eventice-backend/pom.xml)
+          VERSION=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' eventice-backend/pom.xml)
           echo "VERSION=$VERSION"
           echo "version=$VERSION" >> $GITHUB_ENV
       - name: Login to GitHub Container Registry
