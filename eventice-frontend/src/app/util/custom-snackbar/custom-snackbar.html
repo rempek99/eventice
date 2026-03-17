@@ -1,12 +1,7 @@
-<div class="flex rounded-lg justify-between w-full">
+<div>
   <span matSnackBarLabel>{{ data.message }}</span>
-  <span matSnackBarAction class="self-center">
-    <button
-      matButton
-      matSnackBarAction
-      (click)="snackBarRef.dismissWithAction()"
-      class="justify-center hover:text-shadow-xl hover:bg-[rgba(0,0,0,0.2)] rounded-md p-1"
-    >
+  <span matSnackBarAction>
+    <button matButton matSnackBarAction (click)="snackBarRef.dismissWithAction()">
       {{ data.action }}
     </button>
   </span>

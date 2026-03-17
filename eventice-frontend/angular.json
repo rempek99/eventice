@@ -27,7 +27,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/custom-theme.scss", "src/styles.scss"]
+            "styles": ["src/custom-theme.scss", "src/main.scss"]
           },
           "configurations": {
             "production": {
@@ -80,7 +80,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": ["src/main.scss"]
           }
         },
         "lint": {

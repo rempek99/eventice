@@ -6,18 +6,6 @@ import { CommonModule } from '@angular/common';
 
 const HASH_SIGNS = ['*', '#', '$', '%', '&', '!'];
 
-// @NotNull
-// @Size(min = 3, max = 16)
-// private String username;
-
-// @NotNull
-// @Email
-// private String email;
-
-// @NotNull
-// @Size(min = 6, max = 32)
-// private String password;
-
 @Component({
   selector: 'app-register',
   imports: [ReactiveFormsModule, CommonModule],
@@ -75,7 +63,7 @@ export class Register {
       .register(
         this.applyForm.value.email!,
         this.applyForm.value.username!,
-        this.applyForm.value.password!
+        this.applyForm.value.password!,
       )
       .subscribe({
         next: () => {

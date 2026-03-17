@@ -1,9 +1,0 @@
-@use '../../../styles.scss';
-
-.link {
-  @apply hover:font-bold;
-}
-
-.active {
-  @apply font-bold underline;
-}
