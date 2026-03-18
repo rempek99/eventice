@@ -2,6 +2,8 @@ import { Component, computed, InjectionToken, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../../auth/services/auth-service';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ThemeService } from '../../util/theme-service';
 
 export const BROWSER_STORAGE = new InjectionToken<Storage>('Browser Storage', {
   providedIn: 'root',
@@ -10,34 +12,13 @@ export const BROWSER_STORAGE = new InjectionToken<Storage>('Browser Storage', {
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, MatSlideToggleModule],
   templateUrl: './header.html',
   styleUrls: ['./header.scss'],
 })
 export class Header {
   public localStorage = inject(BROWSER_STORAGE);
   authService = inject(AuthService);
-
-  constructor() {
-    if (
-      this.localStorage['theme'] === 'dark' ||
-      (!('theme' in this.localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }
-
-  toggleTheme() {
-    this.localStorage['theme'] = this.localStorage['theme'] === 'dark' ? 'light' : 'dark';
-    document.documentElement.classList.toggle('dark');
-    this.isDarkMode.set(document.documentElement.classList.contains('dark'));
-  }
-
-  isDarkMode = signal(document.documentElement.classList.contains('dark'));
-
-  isDarkModeSign = computed(() => {
-    return this.isDarkMode() ? '💡' : '🌙';
-  });
+  themeService = inject(ThemeService);
+  constructor() {}
 }

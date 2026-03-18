@@ -7,9 +7,8 @@
     </a>
     <a routerLink="/login" routerLinkActive="active">Login</a>
     <a routerLink="/register" routerLinkActive="active">Register</a>
-    <span class="te">{{ authService.getUsername() }}</span>
-    <button (click)="toggleTheme()">
-      {{ isDarkModeSign() }}
-    </button>
+    <span>{{ authService.getUsername() }}</span>
+
+    <!-- <mat-slide-toggle (change)="themeService.toggleTheme()"> Dark Mode </mat-slide-toggle> -->
   </div>
 </header>
