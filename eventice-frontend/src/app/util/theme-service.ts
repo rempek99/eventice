@@ -3,7 +3,6 @@ import { Injectable, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-// IDK it is not working :(
 export class ThemeService {
   private darkMode = signal(this.getStoredTheme());
 
@@ -13,25 +12,27 @@ export class ThemeService {
 
   private getStoredTheme(): boolean {
     const stored = localStorage.getItem('isDarkMode');
-    return stored ? JSON.parse(stored) : document.documentElement.classList.contains('dark-mode');
+    if (stored !== null) {
+      return JSON.parse(stored);
+    }
+    // Check system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
   private applyTheme(): void {
-    if (this.isDarkMode()) {
+    const isDark = this.darkMode();
+    if (isDark) {
       document.documentElement.classList.add('dark-mode');
     } else {
       document.documentElement.classList.remove('dark-mode');
     }
-    console.log('Dark mode applied:', document.documentElement.classList.contains('dark-mode'));
+    localStorage.setItem('isDarkMode', JSON.stringify(isDark));
   }
 
-  isDarkMode(): boolean {
-    return this.darkMode();
-  }
+  isDarkMode = this.darkMode; // Expose the signal for reactive updates
 
   toggleTheme() {
     this.darkMode.update((mode) => !mode);
-    localStorage.setItem('isDarkMode', JSON.stringify(this.darkMode()));
     this.applyTheme();
   }
 }

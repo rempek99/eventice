@@ -9,6 +9,8 @@
     <a routerLink="/register" routerLinkActive="active">Register</a>
     <span>{{ authService.getUsername() }}</span>
 
-    <!-- <mat-slide-toggle (change)="themeService.toggleTheme()"> Dark Mode </mat-slide-toggle> -->
+    <mat-slide-toggle [checked]="themeService.isDarkMode()" (change)="themeService.toggleTheme()"> 
+      Dark Mode 
+    </mat-slide-toggle>
   </div>
 </header>

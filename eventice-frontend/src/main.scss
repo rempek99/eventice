@@ -5,8 +5,21 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+// Light theme
 html {
-  color-scheme: light dark;
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: mat.$violet-palette,
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+// Dark theme
+html.dark-mode {
+  color-scheme: dark;
   @include mat.theme(
     (
       color: mat.$violet-palette,
