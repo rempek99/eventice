@@ -4,6 +4,8 @@ import { inject } from '@angular/core';
 import { AuthService } from '../../auth/services/auth-service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ThemeService } from '../../util/theme-service';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 export const BROWSER_STORAGE = new InjectionToken<Storage>('Browser Storage', {
   providedIn: 'root',
@@ -12,9 +14,9 @@ export const BROWSER_STORAGE = new InjectionToken<Storage>('Browser Storage', {
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive, MatSlideToggleModule],
-  templateUrl: './header.html',
-  styleUrls: ['./header.scss'],
+  imports: [RouterLink, RouterLinkActive, MatSlideToggleModule, MatToolbarModule, MatIconModule],
+  templateUrl: './toolbar.html',
+  styleUrls: ['./toolbar.scss'],
 })
 export class Header {
   public localStorage = inject(BROWSER_STORAGE);

@@ -1,0 +1,16 @@
+<mat-toolbar color="primary">
+  <span class="clickable-link" routerLink="/">🍺 Eventice App</span>
+  <span class="spacer"></span>
+  <div class="nav-links">
+    <span class="clickable-link" routerLink="/login" routerLinkActive="active">Login</span>
+    <span class="clickable-link" routerLink="/register" routerLinkActive="active">Register</span>
+    <span>{{ authService.getUsername() }}</span>
+  </div>
+  <span class="clickable-link" (click)="themeService.toggleTheme()">
+    @if (themeService.isDarkMode()) {
+      <mat-icon>light_mode</mat-icon>
+    } @else {
+      <mat-icon>dark_mode</mat-icon>
+    }
+  </span>
+</mat-toolbar>
