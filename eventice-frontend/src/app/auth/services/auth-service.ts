@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 interface EventiceJwtPayload extends JwtPayload {
   username: string;
+  authorities?: string[];
 }
 
 interface LoginResponse {
@@ -21,12 +22,14 @@ export class AuthService {
 
   private notify = inject(NotificationService);
 
+  readonly loggedIn = signal(localStorage.getItem('id_token') !== null);
+
   register(email: string, username: string, password: string): Observable<string> {
     const data = { email, username, password };
 
     const result = this.http.post<string>('http://localhost:8080/register', data).pipe(
       map((response) => response as string),
-      catchError((error) => this.handleError(error))
+      catchError((error) => this.handleError(error)),
     );
 
     return result;
@@ -39,12 +42,13 @@ export class AuthService {
         this.notify.show('Logged Succesfully', this.notify.SUCCESS);
         return true;
       }),
-      catchError((error) => this.handleError(error))
+      catchError((error) => this.handleError(error)),
     );
   }
 
   private handleAuth(token: string) {
     localStorage.setItem('id_token', token);
+    this.loggedIn.set(true);
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -55,6 +59,7 @@ export class AuthService {
 
   private invalidateToken(): void {
     localStorage.removeItem('id_token');
+    this.loggedIn.set(false);
   }
 
   getRawToken(): string | null {
@@ -82,5 +87,26 @@ export class AuthService {
       return null;
     }
     return token.username;
+  }
+
+  isLoggedIn(): boolean {
+    return this.loggedIn();
+  }
+
+  getRoles(): string[] {
+    const token = this.getToken();
+    return token?.authorities ?? [];
+  }
+
+  hasRole(role: string): boolean {
+    return this.getRoles().includes(role);
+  }
+
+  isAdmin(): boolean {
+    return this.hasRole('ROLE_ADMIN');
+  }
+
+  logout(): void {
+    this.invalidateToken();
   }
 }

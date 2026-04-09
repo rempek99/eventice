@@ -12,14 +12,17 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.zimnyciechan.eventice.auth.model.User;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -31,13 +34,18 @@ public class JwtService {
     private long JWT_EXPIRATION;
 
     public String generateToken(User userDetails) {
-        return createToken(Map.of(), userDetails);
+        List<String> authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        return createToken(Map.of("authorities", authorities), userDetails);
     }
 
     private String createToken(Map<String, Object> extraClaims, User userDetails) {
+        Map<String, Object> claims = new java.util.HashMap<>(extraClaims);
+        claims.put("username", userDetails.getUsername());
         return Jwts.builder()
-                .setClaims(extraClaims)
-                .setClaims(Map.of("username", userDetails.getUsername()))
+                .setClaims(claims)
                 .setSubject(String.valueOf(userDetails.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))

@@ -1,11 +1,31 @@
 <mat-toolbar color="primary">
+  <mat-menu #navMenu="matMenu">
+    @for (item of navItems(); track item.route) {
+      <button mat-menu-item [routerLink]="item.route" routerLinkActive="active-menu-item">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </button>
+    }
+    @if (authService.loggedIn()) {
+      <mat-divider />
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    }
+  </mat-menu>
+
+  <button mat-icon-button [matMenuTriggerFor]="navMenu" aria-label="Navigation menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
   <span class="clickable-link" routerLink="/">🍺 Eventice App</span>
   <span class="spacer"></span>
-  <div class="nav-links">
-    <span class="clickable-link" routerLink="/login" routerLinkActive="active">Login</span>
-    <span class="clickable-link" routerLink="/register" routerLinkActive="active">Register</span>
-    <span>{{ authService.getUsername() }}</span>
-  </div>
+
+  @if (authService.loggedIn()) {
+    <span class="username">{{ authService.getUsername() }}</span>
+  }
+
   <span class="clickable-link" (click)="themeService.toggleTheme()">
     @if (themeService.isDarkMode()) {
       <mat-icon>light_mode</mat-icon>
