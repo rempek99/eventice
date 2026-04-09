@@ -9,14 +9,14 @@ services:
   backend:
     depends_on:
       - db
-    build: ./eventice-backend/
+    build: ./backend/
     ports:
       - "8080:8080"
     env_file:
       - .env
   frontend:
     build:
-      context: ./eventice-frontend/
+      context: ./frontend/
     environment:
       NODE_ENV: production
     ports:
