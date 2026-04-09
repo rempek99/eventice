@@ -32,9 +32,9 @@ jobs:
           node-version: "24.9.0" # Specify the Node.js version
 
       - name: Install dependencies
-        working-directory: ./eventice-frontend
+        working-directory: ./frontend
         run: npm install
 
       - name: Run ESLint
-        working-directory: ./eventice-frontend
+        working-directory: ./frontend
         run: npm run lint

@@ -1,0 +1,1 @@
+set -a && source local.env && set +a && ./mvnw spring-boot:run

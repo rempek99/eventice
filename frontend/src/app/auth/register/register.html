@@ -1,0 +1,56 @@
+<h1>Register</h1>
+<div>
+  <form (submit)="onSubmit()" [formGroup]="applyForm">
+    <div>
+      <label for="username" class="">Username</label>
+      <input
+        id="username"
+        type="text"
+        [ngClass]="{ 'input-field': true, 'error-field': applyForm.controls.username.invalid }"
+        [formControl]="applyForm.controls.username"
+      />
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        [ngClass]="{ 'input-field': true, 'error-field': applyForm.controls.email.invalid }"
+        [formControl]="applyForm.controls.email"
+      />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        [ngClass]="{ 'input-field': true, 'error-field': applyForm.controls.password.invalid }"
+        [formControl]="applyForm.controls.password"
+      />
+    </div>
+    <button type="submit">Register</button>
+    @if (
+      applyForm.controls.username.invalid ||
+      applyForm.controls.email.invalid ||
+      applyForm.controls.password.invalid
+    ) {
+      <div>
+        <h2>Follow the rules:</h2>
+        <ul>
+          @if (applyForm.controls.username.invalid) {
+            <li>Username: must contain from 3 to 16 characters</li>
+          }
+          @if (applyForm.controls.email.invalid) {
+            <li>Email: provide correct email address</li>
+          }
+          @if (applyForm.controls.password.invalid) {
+            <li>
+              Password: must contain from 6 to 32 characters, including: 1 lowercase letter, 1
+              capital letter, 1 special character, 1 digit
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </form>
+</div>

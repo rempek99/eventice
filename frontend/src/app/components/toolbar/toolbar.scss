@@ -1,0 +1,26 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.clickable-link {
+  cursor: pointer;
+}
+.clickable-link:hover {
+  text-decoration: underline;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.username {
+  margin-right: 8px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.active-menu-item {
+  font-weight: 600;
+}
