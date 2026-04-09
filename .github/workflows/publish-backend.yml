@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - "eventice-backend/**"
+      - "backend/**"
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
       - name: Extract Version
         id: extract_version
         run: |
-          VERSION=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' eventice-backend/pom.xml)
+          VERSION=$(xmllint --xpath '/*[local-name()="project"]/*[local-name()="version"]/text()' backend/pom.xml)
           echo "VERSION=$VERSION"
           echo "version_backend=$VERSION" >> $GITHUB_ENV
       - name: Login to GitHub Container Registry
@@ -31,6 +31,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./eventice-backend
+          context: ./backend
           push: true
           tags: zimnyciechan/eventice-backend:${{ env.version_backend }}
