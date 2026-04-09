@@ -26,11 +26,11 @@
     <span class="username">{{ authService.getUsername() }}</span>
   }
 
-  <span class="clickable-link" (click)="themeService.toggleTheme()">
+  <button mat-icon-button (click)="themeService.toggleTheme()" aria-label="Toggle theme">
     @if (themeService.isDarkMode()) {
       <mat-icon>light_mode</mat-icon>
     } @else {
       <mat-icon>dark_mode</mat-icon>
     }
-  </span>
+  </button>
 </mat-toolbar>

@@ -1,4 +1,4 @@
-import { Component, computed, InjectionToken, signal } from '@angular/core';
+import { Component, computed, InjectionToken } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../../auth/services/auth-service';
